@@ -5,57 +5,85 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2게뭐조</title>
-    <link rel="stylesheet" href="static/css/style.css">
-    
+    <link rel="stylesheet" href="static/css/style.css" />
   </head>
   <body>
     <header>
-      <div class="title"><h1>2게뭐조 - 프로젝트이름을 정해주세요</h1></div>
-      <div class="container">
-        <div class="summary">counter1</div>
-        <div class="summary">counter2</div>
-        <div class="summary">counter3</div>
-        <div class="summary">counter4</div>
+      <h1>2게뭐조 - 프로젝트이름을 정해주세요</h1>
+      <div class="summary-wrapper">
+        <div class="summary">
+          <img src="/static/assets/image/wordcloud.png" alt="Word Cloud" />
+        </div>
+        <div class="summary">
+          <img src="/static/assets/image/map.png" alt="Map" />
+        </div>
+        <div class="summary">
+          <button>more information</button>
+        </div>
       </div>
     </header>
-    <section>
-      <nav class="filter-container">
-        <div class="filter-nav">
-          <a href="#" id="filterA" class="active">ALL</a>
-          <a href="#" id="filterA">filter 1</a>
-          <a href="#" id="filterB">filter 2</a>
-          <a href="#" id="filterC">filter 3</a>
-        </div>
-      </nav>
-    </section>
+
+    <nav class="filter-nav">
+      <a href="#" id="filterA" class="active">ALL for Data</a>
+      <a href="#" id="filterA">Data Engineer</a>
+      <a href="#" id="filterB">Data Analyst</a>
+      <a href="#" id="filterC">Data Scientist</a>
+    </nav>
+
     <section class="search-container">
       <table class="results-table">
-        <!-- <thead>
-          <tr>
-            <th>바로가기</th>
-            <th>제목</th>
-            <th>회사</th>
-            <th>마감일</th>
-            <th>출처</th>
-          </tr>
-        </thead> -->
         <tbody id="result">
           {% for recruit in recruits %}
-          <tr>
+          <tr class="recruit-row">
             <td>
               <a href="{{ recruit.detail_url }}">
-                <!-- <img src="/static/image/{{ img.image }}.png" alt="로고" style="width: 3rem; height: auto" /> -->
                 <img src="/static/assets/image/{{ recruit.platform_name }}.png" alt="로고" style="width: 3rem; height: auto" />
               </a>
             </td>
             <td>{{ recruit.title }}</td>
             <td>{{ recruit.company_name }}</td>
-            <td>{{ recruit.end_date }}</td>
+            <td class="end-date" data-end-date="{{ recruit.end_date }}">
+              <span>{{ recruit.end_date }}</span>
+            </td>
             <td>{{ recruit.platform_name }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const endDateCells = document.querySelectorAll(".end-date");
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        endDateCells.forEach((cell) => {
+          const endDateString = cell.getAttribute("data-end-date");
+
+          if (endDateString === "수시채용" || endDateString === "채용시") {
+            return;
+          }
+          let endDate = new Date(endDateString);
+          if (isNaN(endDate)) {
+            return;
+          }
+
+          endDate.setHours(0, 0, 0, 0);
+
+          const diffTime = endDate - today;
+          const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+          console.log("Difference in days:", diffDays);
+          const span = cell.querySelector("span");
+
+          if (diffDays === 0) {
+            span.classList.add("red-background");
+          } else if (diffDays > 0 && diffDays <= 10) {
+            span.classList.add("orange-background");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
