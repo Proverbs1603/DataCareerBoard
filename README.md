@@ -36,7 +36,7 @@ $ python manage.py migrate
 ### 5. 서버 실행
 프로젝트 서버를 실행하려면, 아래 명령어를 입력하세요 (가상환경에서 하세요):
 ```
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 ### 6. 브라우저에서 페이지 확인
