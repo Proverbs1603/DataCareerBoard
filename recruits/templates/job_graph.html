@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graph Detail Page</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <nav class="sidebar">
+        <a href="/recruits/" class="title">2게뭐조</a>
+        <a href="/recruits/table/"><img src="/static/assets/image/data-icon.png" alt="table Icon" class="icon" />table</a>
+        <a href="/recruits/graph/"><img src="/static/assets/image/graph-icon.png" alt="graph Icon" class="icon" />graph</a>
+      </nav>
+
+      <main class="content">
+        <section class="graph-detail-container">
+          <h2>Visualized Data</h2>
+          <!-- grid 로 구성예정-->
+          <div class="graph-wrapper">
+            <div class="graph" id="graph"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/static/js/scripts.js"></script>
+  </body>
+</html>
