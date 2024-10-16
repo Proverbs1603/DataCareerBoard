@@ -10,9 +10,13 @@
   <body>
     <div class="dashboard">
       <nav class="sidebar">
-        <a href="/recruits/" class="title">2게뭐조</a>
-        <a href="/recruits/table/"><img src="/static/assets/image/data-icon.png" alt="table Icon" class="icon" />table</a>
-        <a href="/recruits/graph/"><img src="/static/assets/image/graph-icon.png" alt="graph Icon" class="icon" />graph</a>
+        <a href="/recruits/" class="title {% if request.path == '/recruits/' %}active{% endif %}">2게뭐조</a>
+        <a href="/recruits/table/" class="{% if request.path == '/recruits/table/' %}active{% endif %}"
+          ><img src="{% static 'assets/image/data-icon.png' %}" alt="table Icon" class="icon" />table</a
+        >
+        <a href="/recruits/graph/" class="{% if request.path == '/recruits/graph/' %}active{% endif %}"
+          ><img src="{% static 'assets/image/graph-icon.png' %}" alt="graph Icon" class="icon" />graph</a
+        >
       </nav>
 
       <main class="content">
@@ -58,38 +62,6 @@
         </section>
       </main>
     </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const endDateCells = document.querySelectorAll(".end-date");
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        endDateCells.forEach((cell) => {
-          const endDateString = cell.getAttribute("data-end-date");
-
-          if (endDateString === "수시채용" || endDateString === "채용시") {
-            return;
-          }
-          let endDate = new Date(endDateString);
-          if (isNaN(endDate)) {
-            return;
-          }
-
-          endDate.setHours(0, 0, 0, 0);
-
-          const diffTime = endDate - today;
-          const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-          console.log("Difference in days:", diffDays);
-          const span = cell.querySelector("span");
-
-          if (diffDays === 0) {
-            span.classList.add("red-background");
-          } else if (diffDays > 0 && diffDays <= 10) {
-            span.classList.add("orange-background");
-          }
-        });
-      });
-    </script>
+    <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>
