@@ -5,53 +5,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2게뭐조</title>
-    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <header>
-      <h1>2게뭐조 - 프로젝트이름을 정해주세요</h1>
-      <div class="summary-wrapper">
-        <div class="summary">
-          <img src="/static/assets/image/wordcloud.png" alt="Word Cloud" />
-        </div>
-        <div class="summary">
-          <img src="/static/assets/image/map.png" alt="Map" />
-        </div>
-        <div class="summary">
-          <button>more information</button>
-        </div>
-      </div>
-    </header>
+    <div class="dashboard">
+      <nav class="sidebar">
+        <a href="/recruits/" class="title">2게뭐조</a>
+        <a href="/recruits/table/"><img src="/static/assets/image/data-icon.png" alt="table Icon" class="icon" />table</a>
+        <a href="/recruits/graph/"><img src="/static/assets/image/graph-icon.png" alt="graph Icon" class="icon" />graph</a>
+      </nav>
 
-    <nav class="filter-nav">
-      <a href="#" id="filterA" class="active">ALL for Data</a>
-      <a href="#" id="filterA">Data Engineer</a>
-      <a href="#" id="filterB">Data Analyst</a>
-      <a href="#" id="filterC">Data Scientist</a>
-    </nav>
-
-    <section class="search-container">
-      <table class="results-table">
-        <tbody id="result">
-          {% for recruit in recruits %}
-          <tr class="recruit-row">
-            <td>
-              <a href="{{ recruit.detail_url }}">
-                <img src="/static/assets/image/{{ recruit.platform_name }}.png" alt="로고" style="width: 3rem; height: auto" />
-              </a>
-            </td>
-            <td>{{ recruit.title }}</td>
-            <td>{{ recruit.company_name }}</td>
-            <td class="end-date" data-end-date="{{ recruit.end_date }}">
-              <span>{{ recruit.end_date }}</span>
-            </td>
-            <td>{{ recruit.platform_name }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </section>
-
+      <main class="content">
+        <section class="graph-container">
+          <div class="card-wrapper">
+            <h3>Summary</h3>
+            <div class="card">
+              <span class="count">15</span>
+              <span>오늘 마감 공고</span>
+              <!-- <p>{{ job_count }}</p> -->
+            </div>
+            <div class="card">
+              <span class="count">13</span>
+              <span>검색 채널 수</span>
+              <!-- <p>{{ job_application_count }}</p> -->
+            </div>
+          </div>
+          <div class="img-wrapper">
+            <img src="/static/assets/image/wordcloud.png" alt="Word Cloud" />
+          </div>
+        </section>
+        <section class="table-container">
+          <h3>Job Postings Closing This Week</h3>
+          <table class="results-table">
+            <tbody id="result">
+              {% for recruit in recruits %}
+              <tr class="recruit-row">
+                <td>
+                  <a href="{{ recruit.detail_url }}">
+                    <img class="logo" src="/static/assets/image/{{ recruit.platform_name }}.png" alt="logo" />
+                  </a>
+                </td>
+                <td>{{ recruit.title }}</td>
+                <td>{{ recruit.company_name }}</td>
+                <td class="end-date" data-end-date="{{ recruit.end_date }}">
+                  <span>{{ recruit.end_date }}</span>
+                </td>
+                <td>{{ recruit.platform_name }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const endDateCells = document.querySelectorAll(".end-date");

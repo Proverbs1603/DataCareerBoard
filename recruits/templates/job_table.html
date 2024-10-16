@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table Detail Page</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <nav class="sidebar">
+        <a href="/recruits/" class="title">2게뭐조</a>
+        <a href="/recruits/table/"><img src="/static/assets/image/data-icon.png" alt="table Icon" class="icon" />table</a>
+        <a href="/recruits/graph/"><img src="/static/assets/image/graph-icon.png" alt="graph Icon" class="icon" />graph</a>
+      </nav>
+
+      <main class="content">
+        <section class="table-detail-container">
+          <h2>All Data-Related Job Postings</h2>
+          <nav class="filter-nav">
+            <a href="#" id="filterA" class="active">ALL</a>
+            <a href="#" id="filterB">Data Engineer</a>
+            <a href="#" id="filterC">Data Analyst</a>
+            <a href="#" id="filterD">Data Scientist</a>
+          </nav>
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Logo</th>
+                <th>Title</th>
+                <th>Company</th>
+                <th>End Date</th>
+                <th>Platform</th>
+                <th>Location</th>
+                <th>Job Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for recruit in recruits %}
+              <tr class="recruit-row">
+                <td>
+                  <a href="{{ recruit.detail_url }}">
+                    <img class="logo" src="/static/assets/image/{{ recruit.platform_name }}.png" alt="logo" />
+                  </a>
+                </td>
+                <td>{{ recruit.title }}</td>
+                <td>{{ recruit.company_name }}</td>
+                <td class="end-date" data-end-date="{{ recruit.end_date }}">
+                  <span>{{ recruit.end_date }}</span>
+                </td>
+                <td>{{ recruit.platform_name }}</td>
+                <td>{{ recruit.location }}</td>
+                <td>{{ recruit.job_type }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+    <script src="/static/js/scripts.js"></script>
+  </body>
+</html>

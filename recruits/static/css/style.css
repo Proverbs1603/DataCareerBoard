@@ -1,45 +1,117 @@
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 body {
   font-family: Arial, sans-serif;
-  width: calc(100% - 16rem);
-  margin: 0 auto;
-  background-color: #f0f0f0;
+  width: 100%;
+  height: 100%;
+  background-color: #004b44;
 }
-header {
+.dashboard {
+  display: flex;
+  height: calc(100% - 6rem);
+  margin: 3rem;
+  border-radius: 1rem;
+  background-color: #f2f1ee;
+}
+.sidebar {
   display: flex;
   flex-direction: column;
+  width: 10rem;
+  box-shadow: 3px 0 1rem rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+}
+.sidebar a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5rem;
+}
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #004b44;
+  color: white;
+}
+.sidebar a .icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+.title {
+  font-size: 1.6rem;
+  font-weight: bolder;
+  margin: 3rem 0 1rem 0;
+  text-align: center;
   justify-content: center;
+  padding: 0;
 }
-h1 {
-  margin-top: 2rem;
-  height: 5rem;
+
+.content {
+  width: 100%;
+  padding: 3rem;
   display: flex;
-  align-items: end;
+  flex-direction: column;
 }
-.summary-wrapper {
+.graph-container {
   display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-height: 17rem;
   justify-content: space-between;
-  align-items: center;
+  /* border: 1px solid blue; */
 }
-.summary {
-  width: 20rem;
-  height: 15rem;
+.card-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 33%;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
 }
-.summary img {
-  width: 20rem;
-  height: 15rem;
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  background-color: white;
+}
+.card .count {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+.img-wrapper {
+  width: 65%;
+  border-radius: 0.5rem;
+  /* border: 2px solid yellow; */
+}
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 0.5rem;
+}
+.table-container {
+  padding: 1rem;
+  margin-top: 2rem;
+  max-height: 346px;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
 }
 .filter-nav {
   display: flex;
-  margin-top: 2rem;
-  border-bottom: 1px solid #ccc;
+  margin-top: 1rem;
 }
 .filter-nav a {
   padding: 0.5rem 1rem;
@@ -56,28 +128,27 @@ h1 {
 .filter-nav a:hover {
   background-color: #ccc;
 }
+
 .results-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
   background-color: white;
 }
-th,
 td {
   border: 1px solid #ccc;
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: left;
   border-left: none;
   border-right: none;
-}
-.results-table th {
-  background-color: #e0e0e0;
-  border-bottom: 1px solid #ccc;
+  vertical-align: middle;
 }
 .logo {
   width: 3rem;
   height: auto;
   transition: transform 0.3s;
+  display: block;
+  margin: auto;
 }
 .logo:hover {
   transform: scale(1.3);
@@ -97,7 +168,6 @@ td {
 .orange-background::after {
   content: "일주일 내 마감입니다";
   position: absolute;
-  /* bottom: 100%; */
   bottom: -80%;
   left: 50%;
   transform: translateX(-50%);
@@ -107,5 +177,5 @@ td {
   transition: opacity 0.3s;
 }
 .orange-background:hover::after {
-  opacity: 0.8; /* 마우스를 올리면 보이도록 설정 */
+  opacity: 0.8;
 }
