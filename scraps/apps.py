@@ -1,6 +1,12 @@
 from django.apps import AppConfig
 
-
+'''
+1. 자기가 만든 Scraper 클래스를 import 하세요
+2. 스크래퍼 인스턴스 생성
+3. 아래 코드를 참고하셔서 인스턴스에서 start_scraper_scheduler를 호출하세요
+4. 테스트 하실 땐 다른사람의 코드는 주석 처리하고 자신의 코드만 돌려서 확인해보세요.
+5. 실행시킬 땐 'python.manage.py runserver --noreload' 로 실행시켜주세요
+'''
 
 class ScrapsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
