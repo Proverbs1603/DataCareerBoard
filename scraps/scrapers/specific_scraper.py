@@ -11,7 +11,7 @@ class TheteamsScraper(BaseScraper):
 
     def scrap(self):
         search_querys = self.search_querys
-        data_list = []
+        # data_list = []
         with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver:  
             for keword in search_querys:
                 url = "https://www.theteams.kr/results/recruit/?search_query={}".format(keword)
@@ -21,29 +21,28 @@ class TheteamsScraper(BaseScraper):
                     # 현재 URL 출력
                     # print(f"Current URL: {driver.current_url}")
                     # 캡션 클래스 내부에 data를 수집
-                    elements = driver.find_elements(By.CLASS_NAME, "caption")
                     for element in driver.find_elements(By.CLASS_NAME, "caption"):
                         try:
                             category_element = element.find_element(By.CLASS_NAME, "badge_occupation") #카테고리 이름, ex)데이터 사이언스
-                            carrer_element = element.find_elements(By.TAG_NAME, "div")[1] #carrer, ex)신입/경력 
+                            # carrer_element = element.find_elements(By.TAG_NAME, "div")[1] #carrer, ex)신입/경력 , 비고 : 크롤링 페이지에서 요소 안보임.
                             title_element = element.find_element(By.TAG_NAME, "h4") #공고제목, ex) [숨고] Business Data Analyst
                             company_nm_element = element.find_element(By.TAG_NAME, "p") #회사이름, ex) (주)브레이브모바일
                             detial_url_element = element.find_element(By.TAG_NAME, "a") #디테일 페이지 주소
                             
 
                             job_info = {
-                                        "title": title_element.text.strip(),
-                                        "company_name": company_nm_element.text.strip(),
-                                        "detail_url": detial_url_element.get_attribute("href"),
-                                        "end_date": "수시채용",
-                                        "platform_name": "theteams",
-                                        "category_name": category_element.text.strip(),
-                                        "stack": "기술스택",
-                                        "region": "지역",
-                                        "career": carrer_element.text.strip(),
+                                        "title" : title_element.text.strip(),
+                                        "company_name" : company_nm_element.text.strip(),
+                                        "detail_url" : detial_url_element.get_attribute("href"),
+                                        "end_date" : None,
+                                        "platform_name" : "theteams",
+                                        "category_name" : category_element.text.strip(),
+                                        "stack" : None,
+                                        "region" : None,
+                                        "career" : None,
                             }
-                            data_list.append(job_info)
-                            # print("Text:", (div_element.text.strip(), h4_element.text.strip(), p4_element.text.strip(), a4_element))
+                            #요청 1개씩 바로바로 보내기
+                            self.request_save(job_info)
                         except Exception as e:
                             print(f"Error extracting element data: {e}")
                     
@@ -67,4 +66,4 @@ class TheteamsScraper(BaseScraper):
                     except Exception as e:
                         print(f"Error navigating to next page: {e}")
                         break
-        self.request_save(data_list)
+        # self.request_save(data_list)
