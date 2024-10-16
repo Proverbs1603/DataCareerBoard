@@ -26,11 +26,12 @@ SECRET_KEY = 'django-insecure-x1k!9xgx!w%+75hfzy!bschd9=_23oe-d24zx@(n164cwvvmc%
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+APPEND_SLASH = False
 
 # Application definition
 
 INSTALLED_APPS = [
+    'scraps.apps.ScrapsConfig',
     'rest_framework',
     'recruits.apps.RecruitsConfig',
     'django.contrib.admin',
