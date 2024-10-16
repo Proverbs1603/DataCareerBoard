@@ -30,6 +30,7 @@ class Recruit(models.Model):
     def __str__(self): # 직관적 출력 해당 메서드 정의 안할 시 <Recruit: Recruit object (1)> 
         return f'{self.title} - {self.company_name}'
     
+    
 
 # 변경사항 있을 시
 # python manage.py makemigrations
