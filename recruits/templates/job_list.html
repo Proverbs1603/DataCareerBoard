@@ -39,7 +39,10 @@
           </div>
         </section>
         <section class="table-container">
-          <h3>Job Postings Closing This Week</h3>
+          <div class="table-label">
+            <h3>Job Postings</h3>
+            <button type="text" id="filterThisWeek">일주일 내 마감 공고</button>
+          </div>
           <table class="results-table">
             <tbody id="result">
               {% for recruit in recruits %}

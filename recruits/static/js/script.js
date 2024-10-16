@@ -83,3 +83,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// this week filter button
+document.addEventListener("DOMContentLoaded", function () {
+  const rows = document.querySelectorAll("#result .recruit-row");
+
+  rows.forEach((row) => {
+    if (row.querySelector("td:nth-child(2)").textContent.includes("수시채용")) {
+      row.style.display = "none";
+    }
+  });
+
+  document.getElementById("filterThisWeek").addEventListener("click", function () {
+    const today = new Date();
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(today.getDate() + 7);
+
+    rows.forEach((row) => {
+      const endDate = new Date(row.querySelector(".end-date").dataset.endDate);
+      const isRecruitmentOpen = !row.querySelector("td:nth-child(2)").textContent.includes("수시채용");
+
+      if (endDate >= today && endDate <= endOfWeek && isRecruitmentOpen) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  });
+});
