@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
+import time
 
 class TheteamsScraper(BaseScraper):
     def __init__(self):
@@ -80,20 +82,121 @@ class TheteamsScraper(BaseScraper):
 ' with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver ' 를 이용해서 브라우저가 종료될 수 있도록 해주세요.
 7. 코드를 다 작성하셨다면 scrapers > apps.py 파일에 들어가셔서 주석을 확인해주세요.
 '''
+class RocketpunchScraper(BaseScraper):
+    def __init__(self):
+        super().__init__()
+        
+    def scrap(self):
+        base_url = "https://www.rocketpunch.com"
+        page_num = 1
+        with webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="129.0.6668.101").install())) as driver:
+            url = f"https://www.rocketpunch.com/jobs?page={page_num}&keywords=%EB%8D%B0%EC%9D%B4%ED%84%B0"
+            driver.get(url)
+            time.sleep(3)
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+            job_titles = soup.find_all('a', class_='nowrap job-title')
+            if not job_titles:
+                return
+            
+            for job in job_titles:
+                
+                # "데이터"와 무관한 공고가 검색이 많이 되서 필터링
+                title = job.get_text().strip()
+                if (not "데이터" in title) and (not "data" in title.lower()): 
+                    continue
+                
+                job_info = {'title': title}
+                
+                job_url = base_url + job['href']
+                driver.get(job_url)
+                time.sleep(3)
+                soup = BeautifulSoup(driver.page_source, 'html.parser')
+                
+                # 공고제목 - title, 회사이름 - company_name, 공고주소 - detail_url, 이미지주소 - img_link, 
+                # 등록일 - pub_date, 마감일 - end_date, 카테고리 - category_name, 기술스택 - stack
+                # 지역 - region, 신입/경력 - career
+                job_info['company_name'] = soup.find_all('a', class_="nowrap company-name")[0].get_text().strip()
+                job_info['detail_url'] = job_url
+                
+                end_date = soup.find('i', class_="ic-calendar_new icon").next_sibling.get_text().strip()
+                job_info['end_date'] = end_date.split()[0]
+                job_info['platform_name'] = "RocketPunch"
+                
+                job_info['category_name'] = None # 카테고리는 따로 없어서 추출하지 않음
+                stacks = soup.select_one("#wrap > div.eight.wide.job-content.column > section:nth-child(5) > div").find_all('a')
+                job_info['stack'] = [stack.get_text().strip() for stack in stacks]
+                job_info['career'] = soup.select_one("body > div.pusher.dimmable > div.ui.vertical.center.aligned.detail.job-header.header.segment > div > div > div.job-stat-info").get_text().strip()
+
+                # 지역의 경우 생략된 공고가 있어 예외처리
+                region = soup.find(name='span', class_="address")
+                if not region:
+                    job_info['region'] = None
+                else:
+                    region = region.get_text().strip()
+                    job_info['region'] = " ".join(region.split()[:2]) # 주소 텍스트에서 서울특별시 **구, 경기도 **시 까지만 저장
+                
+                self.request_save(job_info)
+            page_num += 1
+
+
 class SurfitScraper(BaseScraper):
     def __init__(self):
         super().__init__()
-        self.search_querys = ['데이터', '백엔드']    
-    
+        self.category_to_name = {
+            "develop/data": "데이터 엔지니어",
+            "develop/data-science": "데이터 사이언티스트",
+            "develop/bigdata-ai-ml": "머신러닝 엔지니어",
+            "planning/biz-analyst": "비즈니스 분석가"
+        }
+        self.cat_key = self.category_to_name.keys()
+        
     #반드시 구현
     def scrap(self):
+        sample = {'title':'sss', 'company_name':'test5', 'detail_url':'test', 'end_date':'2024-5-5', 'platform_name':'surfit','stack':[],'region':'경기도 양주시 고읍동', 'career':'무관'}
+        self.request_save(sample)
         
-        #서버에 저장 요청하는 메서드
-        data = {
-            
-        }
-        self.request_save(data)
-        pass
+        with webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="129.0.6668.101").install())) as driver:
+            for cat in self.cat_key:
+                base_url = f"https://jobs.surfit.io/{cat}" 
+
+                driver.get(base_url)
+                time.sleep(1)
+
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);") # 스크롤하는 동작이 없으면 공고가 로드되지 않음
+                time.sleep(5)
+                soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+                job_titles = soup.find_all('span', class_="post-title")
+                for job in job_titles:
+                    job_info = {'title': job.get_text().strip()} # 공고 제목
+                    job_url = job.find_parent('a')['href']
+                    
+                    driver.get(job_url)
+                    time.sleep(3)
+                    soup = BeautifulSoup(driver.page_source, 'html.parser')
+                    
+                    # 공고제목 - title, 회사이름 - company_name, 공고주소 - detail_url, 이미지주소 - img_link, 
+                    # 등록일 - pub_date, 마감일 - end_date, 카테고리 - category_name, 기술스택 - stack
+                    # 지역 - region, 신입/경력 - career
+                    job_info['company_name'] = soup.select_one('#app > div.jobs > div > div > div > div > div.iTVFTT > div.zpulQ > div > div > span').get_text().strip()
+                    job_info['detail_url'] = job_url
+                    job_info['end_date'] = soup.select_one("#app > div.jobs > div > div > div > div > div.content-area.isNepE > div > div > ul > li:nth-child(3) > span.value").get_text().strip()
+                    job_info['platform_name'] = "Surfit"
+                    job_info['category_name'] = self.category_to_name[cat]
+                    
+                    stacks = soup.select_one("#app > div.jobs > div > div > div > div > div.content-area.isNepE > div > div > div.job-post-info > div:nth-child(2) > ul")
+                    if not stacks:
+                        job_info['stack'] = None
+                    else:
+                        stacks = stacks.find_all('li')
+                        job_info['stack'] = [stack.get_text().strip() for stack in stacks]
+                        
+                    region = soup.find("span", class_="location-text").get_text().strip()
+                    job_info['region'] = " ".join(region.split()[:2])  # 주소 텍스트에서 서울특별시 **구, 경기도 **시 까지만 저장
+                    job_info['career'] = soup.select_one("#app > div.jobs > div > div > div > div > div.content-area.isNepE > div > div > ul > li:nth-child(1) > span.value").get_text().strip()
+                    
+                    self.request_save(job_info)
 
 class SaraminScraper(BaseScraper):
     def __init__(self):
