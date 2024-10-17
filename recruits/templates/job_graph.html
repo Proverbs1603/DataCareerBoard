@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Graph Detail Page</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   </head>
   <body>
     <div class="dashboard">
@@ -14,17 +15,39 @@
         <a href="/recruits/table/"><img src="/static/assets/image/data-icon.png" alt="table Icon" class="icon" />table</a>
         <a href="/recruits/graph/"><img src="/static/assets/image/graph-icon.png" alt="graph Icon" class="icon" />graph</a>
       </nav>
-
       <main class="content">
         <section class="graph-detail-container">
           <h2>Visualized Data</h2>
-          <!-- grid 로 구성예정-->
+          <!-- 플랫폼 및 카테고리 별 공고 그래프 -->
           <div class="graph-wrapper">
-            <div class="graph" id="graph"></div>
+            <h3>플랫폼 및 카테고리 별 채용 공고</h3>
+            <div class="graph" id="graph-platform-category">
+              {{ line_plot_html|safe }}
+            </div>
+          </div>
+          <!-- 시/도별 채용 공고 그래프 -->
+          <div class="graph-wrapper">
+            <h3>시/도별 채용 공고 수</h3>
+            <div class="graph" id="graph-choropleth">
+              {{ choropleth_html|safe }}
+            </div>
+          </div>
+          <!-- 신입/경력 공고 비율 그래프 -->
+          <div class="graph-wrapper">
+            <h3>신입/경력 공고 수 비율</h3>
+            <img src="data:image/png;base64,{{ bar_graph }}" alt="신입/경력 공고 비율">
+          </div>
+          <!-- 카테고리별 기술 스택 (워드클라우드) -->
+          <div class="graph-wrapper">
+            <h3>카테고리별 기술 스택 (워드클라우드)</h3>
+            {% for category, image in wordclouds.items %}
+              <h4>{{ category }}</h4>
+              <img src="data:image/png;base64,{{ image }}" alt="{{ category }} 기술 스택">
+            {% endfor %}
           </div>
         </section>
       </main>
     </div>
-    <script src="/static/js/scripts.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
   </body>
 </html>
