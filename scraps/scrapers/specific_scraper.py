@@ -6,6 +6,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import time
+import re
+from datetime import datetime
 
 class TheteamsScraper(BaseScraper):
     def __init__(self):
@@ -263,3 +265,85 @@ class SaraminScraper(BaseScraper):
                         print(f"Error extracting job data: {e}")
 
                 self.keyword_index = (self.keyword_index + 1) % len(self.search_querys)
+
+
+class IncruitScraper(BaseScraper):
+    def __init__(self):
+        super().__init__()
+        self.all_jobs = []
+
+    # 지역명 정리
+    def clean_region_name(self, region):
+        cleaned_region = re.sub(r'\s외.*$', '', region)
+        return cleaned_region
+
+    # 경력 정리
+    def clean_career(self, career):
+        if '신입' in career:
+            return '신입'
+        return career
+
+    # 마감일 변환
+    def convert_end_date(self, end_date):
+        today = datetime.now()
+
+        # "23시 마감" 형식 처리
+        if "마감" in end_date:
+            return today.strftime('%Y-%m-%d')
+
+        # "~10.21 (월)" 형식 처리
+        match = re.search(r'~(\d{1,2})\.(\d{1,2})', end_date)
+        if match:
+            month = int(match.group(1))
+            day = int(match.group(2))
+            return today.replace(month=month, day=day).strftime('%Y-%m-%d')
+
+        # 다른 형식은 그대로 반환
+        return end_date
+    
+    def scrap(self):
+        with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver:
+            url = 'https://job.incruit.com/jobdb_list/searchjob.asp?occ3=16935&occ3=16501&occ3=16182&occ3=14780&occ3=17030&occ3=16895&occ3=16865&occ3=16761&occ3=16903&occ2=632&page=1'
+            driver.get(url)
+            time.sleep(3)
+            page_num = 1  # 페이지 번호를 추적하기 위한 변수 추가
+            while True:
+                print(f"현재 {page_num} 페이지 크롤링 중입니다.")
+                jobs = driver.find_elements(By.CLASS_NAME, 'c_col')
+
+                for job in jobs:
+                    try:
+                        company_name = job.find_element(By.CLASS_NAME, 'cell_first').find_element(By.TAG_NAME, 'a').text
+                        mid = job.find_element(By.CLASS_NAME, 'cell_mid')
+                        title = mid.find_element(By.TAG_NAME, 'a').text
+                        detail_url = mid.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                        spans = mid.find_elements(By.TAG_NAME, 'span')
+
+                        filtered_spans = [span for span in spans if 'highlight' not in span.get_attribute('class')]
+
+                        if len(filtered_spans) > 2:
+                            region = filtered_spans[2].text
+                        else:
+                            region = ""
+                        if len(filtered_spans) > 0:
+                            career = filtered_spans[0].text
+                        else:
+                            career = ""
+                        end_date = job.find_element(By.CLASS_NAME, 'cell_last').find_element(By.CLASS_NAME, 'cl_btm').find_element(By.TAG_NAME, 'span').text
+
+                        job_info = {
+                            "title": title,
+                            "company_name": company_name,
+                            "detail_url": detail_url,
+                            "end_date": self.convert_end_date(end_date),
+                            "platform_name": "incruit",
+                            "category_name": "",  
+                            "stack": "",  
+                            "region": self.clean_region_name(region),
+                            "career": self.clean_career(career)
+                        }
+                        self.request_save(job_info)
+
+                    except Exception as e:
+                        print(f"Error extracting job data: {e}")
+                
