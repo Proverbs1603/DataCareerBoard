@@ -111,3 +111,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+// table sort
+function sortTable(columnIndex) {
+  const table = document.getElementById("detail-table");
+  const rows = Array.from(table.rows).slice(1);
+  const isAsc = table.getAttribute("data-order") === "asc";
+
+  // 기존의 아이콘과 스타일 초기화
+  Array.from(table.rows[0].cells).forEach((cell) => {
+    cell.classList.remove("sorted");
+    cell.style.color = "";
+  });
+
+  table.rows[0].cells[columnIndex].classList.add("sorted");
+  table.rows[0].cells[columnIndex].style.color = "#FF7F00";
+
+  rows.sort((a, b) => {
+    const dateA = new Date(a.cells[columnIndex].innerText);
+    const dateB = new Date(b.cells[columnIndex].innerText);
+    return isAsc ? dateA - dateB : dateB - dateA;
+  });
+
+  rows.forEach((row) => table.appendChild(row));
+  table.setAttribute("data-order", isAsc ? "desc" : "asc");
+}
