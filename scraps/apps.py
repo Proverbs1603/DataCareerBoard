@@ -21,11 +21,11 @@ class ScrapsConfig(AppConfig):
         # 60초마다 scrap 메서드 실행 #test10초
         theTeamScraper.start_scraper_scheduler(interval_seconds=10)
         
-        rocketpunchScraper = RocketpunchScraper()
-        rocketpunchScraper.start_scraper_scheduler(interval_seconds=10)
+        # rocketpunchScraper = RocketpunchScraper()
+        # rocketpunchScraper.start_scraper_scheduler(interval_seconds=10)
         
-        surfitScraper = SurfitScraper()
-        surfitScraper.start_scraper_scheduler(interval_seconds=10)
+        # surfitScraper = SurfitScraper()
+        # surfitScraper.start_scraper_scheduler(interval_seconds=10)
         
         # saraminScraper = SaraminScraper()
         # saraminScraper.start_scraper_scheduler(interval_seconds=10)
