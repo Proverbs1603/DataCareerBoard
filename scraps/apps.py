@@ -24,7 +24,7 @@ class ScrapsConfig(AppConfig):
         rocketpunchScraper.start_scraper_scheduler(interval_seconds=30)
         
         surfitScraper = SurfitScraper()
-        surfitScraper.start_scraper_scheduler(interval_seconds=30)
+        surfitScraper.start_scraper_scheduler(interval_seconds=60)
         
         saraminScraper = SaraminScraper()
         saraminScraper.start_scraper_scheduler(interval_seconds=20)
