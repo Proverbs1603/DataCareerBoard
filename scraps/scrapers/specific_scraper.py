@@ -1,4 +1,3 @@
-import datetime
 from .base_scraper import BaseScraper
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -7,7 +6,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class TheteamsScraper(BaseScraper):
     def __init__(self):
@@ -208,14 +207,14 @@ class SaraminScraper(BaseScraper):
     
     def parse_end_date(self, date_text):
         if "오늘마감" in date_text:
-            return datetime.datetime.now().strftime("%Y-%m-%d")
+            return datetime.now().strftime("%Y-%m-%d")
         if "내일마감" in date_text:
-            return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+            return (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
         if date_text.startswith("~ "):
             date_text = date_text[2:]
             try:
-                current_year = datetime.datetime.now().year
-                date_obj = datetime.datetime.strptime(f"{current_year}/{date_text[:5]}", "%Y/%m/%d")
+                current_year = datetime.now().year
+                date_obj = datetime.strptime(f"{current_year}/{date_text[:5]}", "%Y/%m/%d")
                 return date_obj.strftime("%Y-%m-%d")
             except ValueError:
                 pass
