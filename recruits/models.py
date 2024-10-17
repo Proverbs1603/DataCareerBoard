@@ -23,9 +23,10 @@ class Recruit(models.Model):
     # null=True: 데이터베이스 관점에서 필드가 NULL 값을 가질 수 있음을 의미
     # blank=True: Django 폼이나 관리자 페이지에서 필드를 비워둘 수 있음을 의미 (효과가 있을지는 마지막 완성본에서 검증 가능)
     category_name = models.CharField(max_length=100, verbose_name='카테고리', null=True, blank=True)  # 카테고리 정보 (예: 데이터 엔지니어, 머신러닝 등)
-    stack = models.TextField(verbose_name='기술 스택', null=True, blank=True)  # 기술 스택 리스트 -> 문자열로 저장 (예: Python, AWS)
+    stack = models.JSONField(verbose_name='기술 스택', null=True, blank=True)  # 기술 스택 리스트 -> json 필드로 저장
     region = models.CharField(max_length=200, verbose_name='지역', null=True, blank=True)  
     career = models.CharField(max_length=50, verbose_name='신입/경력', null=True, blank=True) 
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name='생성일')
 
     def __str__(self): # 직관적 출력 해당 메서드 정의 안할 시 <Recruit: Recruit object (1)> 
         return f'{self.title} - {self.company_name}'

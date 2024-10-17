@@ -10,7 +10,9 @@ class RecruitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recruit
-        fields = ['title', 'company_name', 'detail_url', 'end_date', 'platform_name']
+        fields = '__all__'
+        read_only_fields = ['pub_date']  # 생성일은 읽기 전용으로 설정
+        # fields = ['title', 'company_name', 'detail_url', 'end_date', 'platform_name']
 
         validators = [
             UniqueTogetherValidator(

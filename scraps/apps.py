@@ -21,4 +21,4 @@ class ScrapsConfig(AppConfig):
         theTeamScraper.start_scraper_scheduler(interval_seconds=10)
         
         saraminScraper = SaraminScraper()
-        saraminScraper.start_scraper_scheduler(interval_seconds=30)
+        saraminScraper.start_scraper_scheduler(interval_seconds=20)
