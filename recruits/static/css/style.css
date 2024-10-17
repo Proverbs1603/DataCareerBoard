@@ -7,10 +7,14 @@ a {
   text-decoration: none;
   color: inherit;
 }
+button {
+  all: unset;
+  display: inline-block;
+}
 body {
   font-family: Arial, sans-serif;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #004b44;
 }
 .dashboard {
@@ -27,11 +31,19 @@ body {
   box-shadow: 3px 0 1rem rgba(0, 0, 0, 0.2);
   padding: 1rem;
 }
+.title {
+  font-size: 1.6rem;
+  font-weight: bolder;
+  margin: 3rem 0 1rem 0;
+  text-align: center;
+  justify-content: center;
+}
 .sidebar a {
   display: flex;
   align-items: center;
   text-decoration: none;
   padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
   border-radius: 5rem;
 }
 .sidebar a:hover,
@@ -44,15 +56,10 @@ body {
   height: 1rem;
   margin-right: 0.5rem;
 }
-.title {
-  font-size: 1.6rem;
-  font-weight: bolder;
-  margin: 3rem 0 1rem 0;
-  text-align: center;
-  justify-content: center;
-  padding: 0;
+.sidebar a:hover .icon,
+.sidebar a.active .icon {
+  filter: brightness(0) invert(1);
 }
-
 .content {
   width: 100%;
   padding: 3rem;
@@ -104,10 +111,29 @@ body {
 .table-container {
   padding: 1rem;
   margin-top: 2rem;
-  max-height: 346px;
+  /* max-heigt 계산 */
+  max-height: 22rem;
   overflow-y: auto;
   border-radius: 0.5rem;
   background-color: #f9f9f9;
+}
+.table-label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#filterThisWeek {
+  padding: 0.5rem 1rem;
+  border: 1px solid#ff6d3b;
+  border-radius: 5rem;
+  color: #ff6d3b;
+}
+#filterThisWeek:hover,
+#filterThisWeek.active {
+  padding: 0.5rem 1rem;
+  border-radius: 5rem;
+  background-color: #ff6d3b;
+  color: white;
 }
 .filter-nav {
   display: flex;
@@ -128,13 +154,28 @@ body {
 .filter-nav a:hover {
   background-color: #ccc;
 }
-
-.results-table {
+.table-wrapper {
   width: 100%;
+  /* max-height 로 변경 */
+  height: 37rem;
   border-collapse: collapse;
   margin-top: 1rem;
   background-color: white;
+  overflow-y: auto;
 }
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-top: 1.5rem;
+}
+.results-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 1;
+}
+th,
 td {
   border: 1px solid #ccc;
   padding: 0.5rem;
@@ -142,6 +183,50 @@ td {
   border-left: none;
   border-right: none;
   vertical-align: middle;
+  height: 4rem;
+  text-align: center;
+}
+.results-table th:first-child,
+.results-table td:first-child {
+  width: 6rem;
+}
+
+#detail-table {
+  margin-top: 0;
+}
+#detail-table th:first-child,
+#detail-table td:first-child,
+#detail-table th:nth-child(2),
+#detail-table td:nth-child(2) {
+  width: 5rem;
+}
+#detail-table th:nth-child(5),
+#detail-table td:nth-child(5) {
+  width: 10rem;
+}
+#detail-table th:nth-child(6),
+#detail-table td:nth-child(6),
+#detail-table th:nth-child(7),
+#detail-table td:nth-child(7) {
+  width: 6rem;
+}
+.bookmark-container {
+  display: inline-block;
+  position: relative;
+}
+input[type="checkbox"] {
+  display: none; /* Hide the default checkbox */
+}
+.bookmark-label {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url("/static/assets/image/bookmark.png");
+  background-size: cover;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked + .bookmark-label {
+  background-image: url("/static/assets/image/bookmark-fill.png");
 }
 .logo {
   width: 3rem;
