@@ -1,3 +1,4 @@
+import datetime
 from .base_scraper import BaseScraper
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -93,3 +94,69 @@ class SurfitScraper(BaseScraper):
         }
         self.request_save(data)
         pass
+
+class SaraminScraper(BaseScraper):
+    def __init__(self):
+        super().__init__()
+        self.search_querys = ["데이터분석", "데이터 엔지니어", "데이터 사이언티스트"] 
+        self.keyword_index = 0   
+    
+    def parse_end_date(self, date_text):
+        if "오늘마감" in date_text:
+            return datetime.datetime.now().strftime("%Y-%m-%d")
+        if "내일마감" in date_text:
+            return (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        if date_text.startswith("~ "):
+            date_text = date_text[2:]
+            try:
+                current_year = datetime.datetime.now().year
+                date_obj = datetime.datetime.strptime(f"{current_year}/{date_text[:5]}", "%Y/%m/%d")
+                return date_obj.strftime("%Y-%m-%d")
+            except ValueError:
+                pass
+        return date_text
+    
+    def scrap(self):
+        with webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="129.0.6668.89").install())) as driver:
+            for page in range(200):
+                current_keyword = self.search_querys[self.keyword_index]
+                url = ('https://www.saramin.co.kr/zf_user/search/recruit?search_area=main&search_done=y&search_optional_item=n'
+                       f'&searchType=search&searchword={current_keyword}&recruitPage={page + 1}&recruitSort=relation&recruitPageCount=40')
+                driver.get(url)
+
+                job_elements = driver.find_elements(By.CLASS_NAME, "item_recruit")
+                if not job_elements:
+                    print("No more jobs found.")
+                    break
+
+                for job in job_elements:
+                    try:
+                        title_element = job.find_element(By.CSS_SELECTOR, "a").get_attribute("title")
+                        title = title_element.strip() if title_element is not None else "No Title"
+                        company_name = job.find_element(By.CSS_SELECTOR, "div.area_corp > strong > a").text.strip()
+                        href = job.find_element(By.CSS_SELECTOR, "a").get_attribute("href")
+                        detail_url = "https://www.saramin.co.kr" + href if href is not None else "No URL"
+                        org_end_date = job.find_element(By.CSS_SELECTOR, "div.job_date span.date").text
+                        end_date = self.parse_end_date(org_end_date)
+                        stack = [a.text.strip() for a in job.find_elements(By.CSS_SELECTOR, "div.job_sector > a")]
+                        region = job.find_element(By.CSS_SELECTOR, "div.job_condition > span > a").text.strip()
+                        career = job.find_element(By.CSS_SELECTOR, "div.job_condition > span:nth-child(2)").text.strip()
+
+                        # Data dictionary to save
+                        data = {
+                            "title": title,
+                            "company_name": company_name,
+                            "detail_url": detail_url,
+                            "end_date": end_date,
+                            "platform_name": "saramin",
+                            "category_name": current_keyword,
+                            "stack": stack,
+                            "region": region,
+                            "career": career,
+                        }
+                        # Send data to the server
+                        self.request_save(data)
+                    except Exception as e:
+                        print(f"Error extracting job data: {e}")
+
+                self.keyword_index = (self.keyword_index + 1) % len(self.search_querys)
