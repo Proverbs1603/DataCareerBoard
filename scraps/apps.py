@@ -1,3 +1,4 @@
+# scraps/scrapers/apps.py
 from django.apps import AppConfig
 
 '''
@@ -14,18 +15,37 @@ class ScrapsConfig(AppConfig):
 
     #when django start, it starts too.
     def ready(self):
-        from scraps.scrapers.specific_scraper import RocketpunchScraper, SaraminScraper, TheteamsScraper, SurfitScraper, IncruitScraper
+        from scraps.scrapers.specific_scraper import TheteamsScraper, RocketpunchScraper, SurfitScraper, SaraminScraper,JobplanetScraper, WantedScraper, ProgrammersScraper, CatchScraper, PeoplenJobScraper, IncruitScraper
+        # 스크래퍼 인스턴스 생성
         theTeamScraper = TheteamsScraper()
+        # 60초마다 scrap 메서드 실행 #test10초
         theTeamScraper.start_scraper_scheduler(interval_seconds=10)
         
         rocketpunchScraper = RocketpunchScraper()
-        rocketpunchScraper.start_scraper_scheduler(interval_seconds=30)
+        rocketpunchScraper.start_scraper_scheduler(interval_seconds=10)
         
         surfitScraper = SurfitScraper()
-        surfitScraper.start_scraper_scheduler(interval_seconds=60)
+        surfitScraper.start_scraper_scheduler(interval_seconds=10)
         
         saraminScraper = SaraminScraper()
-        saraminScraper.start_scraper_scheduler(interval_seconds=20)
+        saraminScraper.start_scraper_scheduler(interval_seconds=10)
+
+        jobplanetScraper = JobplanetScraper()
+        jobplanetScraper.start_scraper_scheduler(interval_seconds=10)
+
+        wantedScraper = WantedScraper()
+        wantedScraper.start_scraper_scheduler(interval_seconds=10)
+
+        #스크래퍼 인스턴스 생성
+        programmersScraper = ProgrammersScraper()
+        # 60초마다 scrap 메서드 실행 #test10초
+        programmersScraper.start_scraper_scheduler(interval_seconds=10)
+
+        catchscraper = CatchScraper()
+        catchscraper.start_scraper_scheduler(interval_seconds=10)
+
+        peoplenJobScraper = PeoplenJobScraper()
+        peoplenJobScraper.start_scraper_scheduler(interval_seconds=10)
 
         incruitScraper = IncruitScraper()
         incruitScraper.start_scraper_scheduler(interval_seconds=10)
