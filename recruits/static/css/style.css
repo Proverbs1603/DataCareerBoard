@@ -15,6 +15,9 @@ body {
   font-family: Arial, sans-serif;
   width: 100%;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   background-color: #004b44;
 }
 .dashboard {
@@ -109,7 +112,6 @@ body {
   border-radius: 0.5rem;
 }
 .table-container {
-  padding: 1rem;
   margin-top: 2rem;
   /* max-heigt 계산 */
   max-height: 22rem;
@@ -121,6 +123,11 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  z-index: 1;
 }
 #filterThisWeek {
   padding: 0.5rem 1rem;
@@ -154,27 +161,6 @@ body {
 .filter-nav a:hover {
   background-color: #ccc;
 }
-.table-wrapper {
-  width: 100%;
-  /* max-height 로 변경 */
-  height: 37rem;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background-color: white;
-  overflow-y: auto;
-}
-.results-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  margin-top: 1.5rem;
-}
-.results-table thead {
-  position: sticky;
-  top: 0;
-  background-color: #f9f9f9;
-  z-index: 1;
-}
 th,
 td {
   border: 1px solid #ccc;
@@ -185,6 +171,16 @@ td {
   vertical-align: middle;
   height: 4rem;
   text-align: center;
+}
+th .sort {
+  cursor: pointer;
+  position: relative;
+}
+.sort-arrow {
+  width: 12px;
+  height: 12px;
+  margin-left: 5px;
+  vertical-align: middle;
 }
 .results-table th:first-child,
 .results-table td:first-child {
@@ -217,6 +213,27 @@ td {
 input[type="checkbox"] {
   display: none; /* Hide the default checkbox */
 }
+.table-wrapper {
+  width: 100%;
+  /* max-height 로 변경 */
+  height: 35rem;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  overflow-y: auto;
+}
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  padding: 1rem;
+}
+.results-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #f9f9f9;
+  z-index: 1;
+}
 .bookmark-label {
   display: inline-block;
   width: 24px;
@@ -243,7 +260,23 @@ input[type="checkbox"]:checked + .bookmark-label {
   border-radius: 5rem;
 }
 .red-background {
-  color: red !important;
+  background-color: red !important;
+  color: white !important;
+  position: relative;
+}
+.red-background::after {
+  content: "오늘 마감입니다";
+  position: absolute;
+  bottom: -80%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: red;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.orange-background:hover::after {
+  opacity: 0.8;
 }
 .orange-background {
   background-color: orange !important;

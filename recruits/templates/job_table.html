@@ -27,16 +27,17 @@
             <a href="#" id="filterB" data-category="데이터 엔지니어">Data Engineer</a>
             <a href="#" id="filterC" data-category="데이터 분석가">Data Analyst</a>
             <a href="#" id="filterD" data-category="데이터 사이언티스트">Data Scientist</a>
+            <a href="#" id="filterD" data-category="미분류">그 외</a>
           </nav>
           <div class="table-wrapper">
-            <table class="results-table" id="detail-table">
+            <table class="results-table" id="detail-table" data-order="asc">
               <thead>
                 <tr>
                   <th>북마크</th>
                   <th>바로가기</th>
                   <th>공고</th>
                   <th>회사</th>
-                  <th>마감일</th>
+                  <th class="sort" onclick="sortTable(4)">마감일 <img src="/static/assets/image/sort.png" alt="arrow" class="sort-arrow" /></th>
                   <th>지역</th>
                   <th>경력</th>
                 </tr>
