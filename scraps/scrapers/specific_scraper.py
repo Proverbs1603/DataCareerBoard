@@ -13,6 +13,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
 from datetime import datetime, timedelta
 
+'''ex) surfit 플랫폼의 경우
+1. 클래스의 첫번째 문자는 대문자 입니다.
+2. 자신의 Scraper클래스를 만들고 BaseScraper 클래스를 상속받으세요.
+3. 생성자 def __init__(self)를 구현하고 super().__init__()으로 부모생성자를 호출해주세요, 그 외에 필요한 필드를 직접 정의하세요.
+4. BaseScraper 클래스의 def scrap(self) 는 추상메서드로 구현되어있습니다. 자식클래스에서 반드시 생성하신 후 그 안에다가 크롤링 코드를 넣어주세요.
+5. BaseScraper 클래스에 데이터를 저장할 수 있는 def request_save(self, data) 가 구현되어있습니다. data는 1개씩 요청하세요.
+6. driver를 이용하실 땐  
+' with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver ' 를 이용해서 브라우저가 종료될 수 있도록 해주세요.
+7. 코드를 다 작성하셨다면 scrapers > apps.py 파일에 들어가셔서 주석을 확인해주세요.
+'''
+
 class TheteamsScraper(BaseScraper):
     def __init__(self):
         super().__init__()
@@ -77,17 +88,6 @@ class TheteamsScraper(BaseScraper):
                         break
         # self.request_save(data_list)
 
-
-'''ex) surfit 플랫폼의 경우
-1. 클래스의 첫번째 문자는 대문자 입니다.
-2. 자신의 Scraper클래스를 만들고 BaseScraper 클래스를 상속받으세요.
-3. 생성자 def __init__(self)를 구현하고 super().__init__()으로 부모생성자를 호출해주세요, 그 외에 필요한 필드를 직접 정의하세요.
-4. BaseScraper 클래스의 def scrap(self) 는 추상메서드로 구현되어있습니다. 자식클래스에서 반드시 생성하신 후 그 안에다가 크롤링 코드를 넣어주세요.
-5. BaseScraper 클래스에 데이터를 저장할 수 있는 def request_save(self, data) 가 구현되어있습니다. data는 1개씩 요청하세요.
-6. driver를 이용하실 땐  
-' with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver ' 를 이용해서 브라우저가 종료될 수 있도록 해주세요.
-7. 코드를 다 작성하셨다면 scrapers > apps.py 파일에 들어가셔서 주석을 확인해주세요.
-'''
 class RocketpunchScraper(BaseScraper):
     def __init__(self):
         super().__init__()
@@ -696,7 +696,7 @@ class PeoplenJobScraper(BaseScraper):
         # 스케줄러 중지
         self.stop_scraper_scheduler()
 
-class TheteamsScraper(BaseScraper):
+
     def __init__(self):
         super().__init__()
         self.search_querys = ['데이터', '백엔드']
@@ -760,7 +760,7 @@ class TheteamsScraper(BaseScraper):
                         break
         # self.request_save(data_list)
 
-class RocketpunchScraper(BaseScraper):
+
     def __init__(self):
         super().__init__()
         
@@ -817,7 +817,7 @@ class RocketpunchScraper(BaseScraper):
                 self.request_save(job_info)
             page_num += 1
 
-class SurfitScraper(BaseScraper):
+
     def __init__(self):
         super().__init__()
         self.category_to_name = {
@@ -875,7 +875,7 @@ class SurfitScraper(BaseScraper):
                     
                     self.request_save(job_info)
 
-class SaraminScraper(BaseScraper):
+
     def __init__(self):
         super().__init__()
         self.search_querys = ["데이터분석", "데이터 엔지니어", "데이터 사이언티스트"] 
