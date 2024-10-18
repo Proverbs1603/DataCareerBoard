@@ -10,7 +10,9 @@
   <body>
     <div class="dashboard">
       <nav class="sidebar">
-        <a href="/recruits/" class="title {% if request.path == '/recruits/' %}active{% endif %}">2게뭐조</a>
+        <a href="/recruits/" class="title {% if request.path == '/recruits/' %}active{% endif %}"
+          ><img src="{% static 'assets/image/two.png' %}" alt="table Icon" class="icon" id="mainIcon"
+        /></a>
         <a href="/recruits/table/" class="{% if request.path == '/recruits/table/' %}active{% endif %}"
           ><img src="{% static 'assets/image/data-icon.png' %}" alt="table Icon" class="icon" />table</a
         >

@@ -63,11 +63,16 @@ body {
 .sidebar a.active .icon {
   filter: brightness(0) invert(1);
 }
+a #mainIcon {
+  width: 3rem;
+  height: 3rem;
+}
 .content {
   width: 100%;
   padding: 3rem;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 .graph-container {
   display: flex;
@@ -111,10 +116,16 @@ body {
   object-fit: cover;
   border-radius: 0.5rem;
 }
-.table-container {
+.under-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin-top: 2rem;
-  /* max-heigt 계산 */
-  max-height: 22rem;
+  max-height: calc(100vh - 18rem);
+  overflow: hidden;
+}
+.table-container {
+  width: 70%;
   overflow-y: auto;
   border-radius: 0.5rem;
   background-color: #f9f9f9;
@@ -128,6 +139,25 @@ body {
   padding: 1rem;
   background-color: #f9f9f9;
   z-index: 1;
+}
+.plattform-container {
+  width: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.plattform-container .row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.plattform {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 #filterThisWeek {
   padding: 0.5rem 1rem;
@@ -194,29 +224,30 @@ th .sort {
 #detail-table td:first-child,
 #detail-table th:nth-child(2),
 #detail-table td:nth-child(2) {
-  width: 5rem;
+  max-width: 5rem;
 }
 #detail-table th:nth-child(5),
 #detail-table td:nth-child(5) {
   width: 10rem;
 }
 #detail-table th:nth-child(6),
-#detail-table td:nth-child(6),
+#detail-table td:nth-child(6) {
+  max-width: 8rem;
+}
 #detail-table th:nth-child(7),
 #detail-table td:nth-child(7) {
-  width: 6rem;
+  max-width: 7rem;
 }
 .bookmark-container {
   display: inline-block;
   position: relative;
 }
 input[type="checkbox"] {
-  display: none; /* Hide the default checkbox */
+  display: none;
 }
 .table-wrapper {
   width: 100%;
-  /* max-height 로 변경 */
-  height: 35rem;
+  max-height: calc(100vh - 18rem);
   border-collapse: collapse;
   margin-top: 1rem;
   background-color: white;
@@ -225,8 +256,10 @@ input[type="checkbox"] {
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
   padding: 1rem;
+}
+.results-table #result td:nth-child(4) {
+  width: 8rem !important;
 }
 .results-table thead {
   position: sticky;

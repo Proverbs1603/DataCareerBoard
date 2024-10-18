@@ -10,7 +10,9 @@
   <body>
     <div class="dashboard">
       <nav class="sidebar">
-        <a href="/recruits/" class="title {% if request.path == '/recruits/' %}active{% endif %}">2게뭐조</a>
+        <a href="/recruits/" class="title {% if request.path == '/recruits/' %}active{% endif %}"
+          ><img src="{% static 'assets/image/two.png' %}" alt="table Icon" class="icon" id="mainIcon"
+        /></a>
         <a href="/recruits/table/" class="{% if request.path == '/recruits/table/' %}active{% endif %}"
           ><img src="{% static 'assets/image/data-icon.png' %}" alt="table Icon" class="icon" />table</a
         >
@@ -38,30 +40,50 @@
             <img src="/static/assets/image/wordcloud.png" alt="Word Cloud" />
           </div>
         </section>
-        <section class="table-container">
-          <div class="table-label">
-            <h3>Job Postings</h3>
-            <button type="text" id="filterThisWeek">일주일 내 마감 공고</button>
+        <section class="under-container">
+          <div class="table-container">
+            <div class="table-label">
+              <h3>Weekly Job Postings</h3>
+            </div>
+            <table class="results-table">
+              <tbody id="result">
+                {% for recruit in recruits %}
+                <tr class="recruit-row">
+                  <td>
+                    <a href="{{ recruit.detail_url }}">
+                      <img class="logo" src="/static/assets/image/{{ recruit.platform_name }}.png" alt="logo" />
+                    </a>
+                  </td>
+                  <td>{{ recruit.title }}</td>
+                  <td>{{ recruit.company_name }}</td>
+                  <td class="end-date" data-end-date="{{ recruit.end_date }}">
+                    <span>{{ recruit.end_date }}</span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-          <table class="results-table">
-            <tbody id="result">
-              {% for recruit in recruits %}
-              <tr class="recruit-row">
-                <td>
-                  <a href="{{ recruit.detail_url }}">
-                    <img class="logo" src="/static/assets/image/{{ recruit.platform_name }}.png" alt="logo" />
-                  </a>
-                </td>
-                <td>{{ recruit.title }}</td>
-                <td>{{ recruit.company_name }}</td>
-                <td class="end-date" data-end-date="{{ recruit.end_date }}">
-                  <span>{{ recruit.end_date }}</span>
-                </td>
-                <td>{{ recruit.platform_name }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+          <div class="plattform-container">
+            <div class="row">
+              <img src="{% static 'assets/image/theteams.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/rocketpunch.png' %}" alt="Logo" class="plattform" />
+            </div>
+            <div class="row">
+              <img src="{% static 'assets/image/surfit.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/saramin.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/wanted.png' %}" alt="Logo" class="plattform" />
+            </div>
+            <div>
+              <img src="{% static 'assets/image/jobplanet.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/programmers.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/catch.png' %}" alt="Logo" class="plattform" />
+            </div>
+            <div class="row">
+              <img src="{% static 'assets/image/peoplenjob.png' %}" alt="Logo" class="plattform" />
+              <img src="{% static 'assets/image/incruit.png' %}" alt="Logo" class="plattform" />
+            </div>
+          </div>
         </section>
       </main>
     </div>
