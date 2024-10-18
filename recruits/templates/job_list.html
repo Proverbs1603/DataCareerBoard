@@ -25,21 +25,36 @@
         <section class="graph-container">
           <div class="card-wrapper">
             <h3>Summary</h3>
+            <span class="total-count">수집된 총 공고 수: {{ all_position_count }}</span> <!-- 총 공고 수 표시 -->
             <div class="card">
               <span class="count">{{ closing_today_count }}</span>
               <span>오늘 마감 공고</span>
-              <!-- <p>{{ job_count }}</p> -->
             </div>
             <div class="card">
               <span class="count">{{ platform_count }}</span>
               <span>검색 채널 수</span>
-              <!-- <p>{{ job_application_count }}</p> -->
             </div>
           </div>
-          <div class="img-wrapper">
-            <img src="/static/assets/image/wordcloud.png" alt="Word Cloud" />
-          </div>
+
+              <!-- 워드클라우드 -->
+              <div class="graph-wrapper2">
+                <span class="total-count">직무별 핵심 기술 역량</span> <!-- 고정 텍스트 추가 -->
+                <div class="grid-container">
+                  {% for category, image in wordclouds.items %}
+                    <div class="wordcloud-item" id="wordcloud-{{ forloop.counter }}" {% if not forloop.first %}style="display:none;"{% endif %}>
+                      <h3>{{ category }}</h3> <!-- 카테고리 이름 출력 -->
+                      <img src="data:image/png;base64,{{ image }}" alt="{{ category }} 기술 스택">
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!-- 좌우 화살표 버튼을 오른쪽으로 배치 -->
+              <div class="controls" style="text-align: right; margin-top: -40px;">
+                <button onclick="changeWordCloud(-1)">&#9664;</button>
+                <button onclick="changeWordCloud(1)">&#9654;</button>
+              </div>
         </section>
+        
         <section class="under-container">
           <div class="table-container">
             <div class="table-label">

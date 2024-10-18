@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   endDateCells.forEach((cell) => {
     const endDateString = cell.getAttribute("data-end-date");
+
     if (endDateString === "수시채용" || endDateString === "채용시") {
       return;
     }
@@ -13,10 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isNaN(endDate)) {
       return;
     }
+
     endDate.setHours(0, 0, 0, 0);
+
     const diffTime = endDate - today;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    console.log("Difference in days:", diffDays);
     const span = cell.querySelector("span");
+
     if (diffDays === 0) {
       span.classList.add("red-background");
     } else if (diffDays > 0 && diffDays <= 10) {
@@ -25,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// table category filter
+// table filter
 document.addEventListener("DOMContentLoaded", function () {
   const filterLinks = document.querySelectorAll(".filter-nav a");
   const rows = document.querySelectorAll(".recruit-row");
@@ -78,34 +84,89 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// sort the table by "마감일" column
-document.addEventListener("DOMContentLoaded", () => {
-  const sortButton = document.querySelector(".sort button");
-  let ascending = true;
+// this week filter button
+document.addEventListener("DOMContentLoaded", function () {
+  const rows = document.querySelectorAll("#result .recruit-row");
 
-  sortButton.addEventListener("click", () => {
-    const rows = Array.from(document.querySelectorAll("#detail-table tbody tr"));
-    rows.sort((a, b) => {
-      const dateA = a.querySelector(".end-date").dataset.endDate;
-      const dateB = b.querySelector(".end-date").dataset.endDate;
+  rows.forEach((row) => {
+    if (row.querySelector("td:nth-child(2)").textContent.includes("수시채용")) {
+      row.style.display = "none";
+    }
+  });
 
-      // "None"과 "상시채용" 값들을 처리
-      if (dateA === "None" && dateB === "None") return 0;
-      if (dateA === "상시채용" && dateB === "상시채용") return 0;
-      if (dateA === "None") return ascending ? 1 : -1;
-      if (dateB === "None") return ascending ? -1 : 1;
-      if (dateA === "상시채용") return ascending ? 1 : -1;
-      if (dateB === "상시채용") return ascending ? -1 : 1;
+  document.getElementById("filterThisWeek").addEventListener("click", function () {
+    const today = new Date();
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(today.getDate() + 7);
 
-      const dateObjA = new Date(dateA);
-      const dateObjB = new Date(dateB);
-      return ascending ? dateObjA - dateObjB : dateObjB - dateObjA;
+    rows.forEach((row) => {
+      const endDate = new Date(row.querySelector(".end-date").dataset.endDate);
+      const isRecruitmentOpen = !row.querySelector("td:nth-child(2)").textContent.includes("수시채용");
+
+      if (endDate >= today && endDate <= endOfWeek && isRecruitmentOpen) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
     });
-
-    const tbody = document.querySelector("#detail-table tbody");
-    tbody.innerHTML = "";
-    rows.forEach((row) => tbody.appendChild(row));
-    ascending = !ascending;
-    sortButton.classList.toggle("sorted", ascending);
   });
 });
+
+// table sort
+function sortTable(columnIndex) {
+  const table = document.getElementById("detail-table");
+  const rows = Array.from(table.rows).slice(1);
+  const isAsc = table.getAttribute("data-order") === "asc";
+
+  // 기존의 아이콘과 스타일 초기화
+  Array.from(table.rows[0].cells).forEach((cell) => {
+    cell.classList.remove("sorted");
+    cell.style.color = "";
+  });
+
+  table.rows[0].cells[columnIndex].classList.add("sorted");
+  table.rows[0].cells[columnIndex].style.color = "#FF7F00";
+
+  rows.sort((a, b) => {
+    const dateA = new Date(a.cells[columnIndex].innerText);
+    const dateB = new Date(b.cells[columnIndex].innerText);
+    return isAsc ? dateA - dateB : dateB - dateA;
+  });
+
+  rows.forEach((row) => table.appendChild(row));
+  table.setAttribute("data-order", isAsc ? "desc" : "asc");
+}
+
+// 워드클라우드
+// 현재 표시 중인 워드클라우드의 인덱스를 추적
+let currentWordCloudIndex = 0;
+
+function showWordCloud(index) {
+    const wordcloudItems = document.querySelectorAll('.wordcloud-item');
+    if (index < 0) {
+        index = wordcloudItems.length - 1; // 첫 번째에서 이전으로 가면 마지막으로 이동
+    } else if (index >= wordcloudItems.length) {
+        index = 0; // 마지막에서 다음으로 가면 첫 번째로 이동
+    }
+
+    // 모든 워드클라우드 숨기기
+    wordcloudItems.forEach(item => item.style.display = 'none');
+
+    // 선택된 워드클라우드만 표시
+    wordcloudItems[index].style.display = 'block';
+    currentWordCloudIndex = index;
+}
+
+// 화살표 버튼 클릭 이벤트에 showWordCloud 연결
+document.querySelectorAll('.controls button').forEach((button, idx) => {
+    button.addEventListener('click', () => {
+        const direction = parseInt(button.getAttribute('onclick').match(/-?\d+/)[0]);
+        showWordCloud(currentWordCloudIndex + direction);
+    });
+});
+
+// 페이지 로드 시 첫 번째 워드클라우드 표시
+document.addEventListener('DOMContentLoaded', () => {
+    showWordCloud(0);
+});
+// 워드클라우드 종료

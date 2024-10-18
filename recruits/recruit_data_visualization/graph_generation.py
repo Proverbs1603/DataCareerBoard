@@ -105,16 +105,14 @@ def create_choropleth(df_filtered):
                                    locations='Region',
                                    featureidkey='properties.CTP_KOR_NM',
                                    color='Counts',
-                                   title='시/도별 채용 공고 수',
                                    color_continuous_scale='Blues',
-                                   width=900, height=700,
+                                   width=600, height=900,
                                    range_color=[1, merged_df['Counts'].max()])
 
 
     fig_choropleth.update_geos(
-        fitbounds="locations",
         visible=False,
-        projection_scale=7,
+        projection_scale=45,
         center={"lat": 36.5, "lon": 127.5},
         showland=True,
         landcolor="white",
