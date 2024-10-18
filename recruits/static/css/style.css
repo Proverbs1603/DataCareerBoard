@@ -202,9 +202,12 @@ td {
   height: 4rem;
   text-align: center;
 }
-th .sort {
+th .sort button {
   cursor: pointer;
   position: relative;
+}
+.sort button.sorted {
+  color: red;
 }
 .sort-arrow {
   width: 12px;
@@ -308,7 +311,7 @@ input[type="checkbox"]:checked + .bookmark-label {
   opacity: 0;
   transition: opacity 0.3s;
 }
-.orange-background:hover::after {
+.red-background:hover::after {
   opacity: 0.8;
 }
 .orange-background {

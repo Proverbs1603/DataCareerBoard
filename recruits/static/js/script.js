@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// table filter
+// table category filter
 document.addEventListener("DOMContentLoaded", function () {
   const filterLinks = document.querySelectorAll(".filter-nav a");
   const rows = document.querySelectorAll(".recruit-row");
@@ -78,82 +78,34 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// this week filter button
-// document.addEventListener("DOMContentLoaded", function () {
-//   const rows = document.querySelectorAll("#result .recruit-row");
-
-//   rows.forEach((row) => {
-//     if (row.querySelector("td:nth-child(2)").textContent.includes("수시채용")) {
-//       row.style.display = "none";
-//     }
-//   });
-
-//   document.getElementById("filterThisWeek").addEventListener("click", function () {
-//     const today = new Date();
-//     const endOfWeek = new Date(today);
-//     endOfWeek.setDate(today.getDate() + 7);
-
-//     rows.forEach((row) => {
-//       const endDate = new Date(row.querySelector(".end-date").dataset.endDate);
-//       const isRecruitmentOpen = !row.querySelector("td:nth-child(2)").textContent.includes("수시채용");
-
-//       if (endDate >= today && endDate <= endOfWeek && isRecruitmentOpen) {
-//         row.style.display = "";
-//       } else {
-//         row.style.display = "none";
-//       }
-//     });
-//   });
-// });
-
-// table sort
+// sort the table by "마감일" column
 document.addEventListener("DOMContentLoaded", () => {
   const sortButton = document.querySelector(".sort button");
-  console.log(sortButton);
-  if (sortButton) {
-    console.log("Sort button found");
-    sortButton.addEventListener("click", () => {
-      let ascending = true;
-      const table = document.getElementById("detail-table");
-      if (!table) {
-        console.error("Table not found");
-        return;
-      }
-      const rows = Array.from(table.tBodies[0].rows);
-      if (!rows.length) {
-        console.error("No rows found in the table body");
-        return;
-      }
-      rows.sort((rowA, rowB) => {
-        const cellA = rowA.cells[4];
-        const cellB = rowB.cells[4];
+  let ascending = true;
 
-        if (!cellA || !cellB) {
-          console.error("Table cell not found");
-          return 0;
-        }
+  sortButton.addEventListener("click", () => {
+    const rows = Array.from(document.querySelectorAll("#detail-table tbody tr"));
+    rows.sort((a, b) => {
+      const dateA = a.querySelector(".end-date").dataset.endDate;
+      const dateB = b.querySelector(".end-date").dataset.endDate;
 
-        const dateA = new Date(cellA.textContent);
-        const dateB = new Date(cellB.textContent);
+      // "None"과 "상시채용" 값들을 처리
+      if (dateA === "None" && dateB === "None") return 0;
+      if (dateA === "상시채용" && dateB === "상시채용") return 0;
+      if (dateA === "None") return ascending ? 1 : -1;
+      if (dateB === "None") return ascending ? -1 : 1;
+      if (dateA === "상시채용") return ascending ? 1 : -1;
+      if (dateB === "상시채용") return ascending ? -1 : 1;
 
-        const isDateAValid = !isNaN(dateA);
-        const isDateBValid = !isNaN(dateB);
-
-        if (!isDateAValid && !isDateBValid) {
-          return 0;
-        } else if (!isDateAValid) {
-          return 1;
-        } else if (!isDateBValid) {
-          return -1;
-        } else {
-          return ascending ? dateA - dateB : dateB - dateA;
-        }
-      });
-
-      ascending = !ascending;
-      rows.forEach((row) => table.tBodies[0].appendChild(row)); // 정렬된 행을 다시 추가
+      const dateObjA = new Date(dateA);
+      const dateObjB = new Date(dateB);
+      return ascending ? dateObjA - dateObjB : dateObjB - dateObjA;
     });
-  } else {
-    console.error("Sort button not found");
-  }
+
+    const tbody = document.querySelector("#detail-table tbody");
+    tbody.innerHTML = "";
+    rows.forEach((row) => tbody.appendChild(row));
+    ascending = !ascending;
+    sortButton.classList.toggle("sorted", ascending);
+  });
 });
