@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   endDateCells.forEach((cell) => {
     const endDateString = cell.getAttribute("data-end-date");
-
     if (endDateString === "수시채용" || endDateString === "채용시") {
       return;
     }
@@ -14,15 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isNaN(endDate)) {
       return;
     }
-
     endDate.setHours(0, 0, 0, 0);
-
     const diffTime = endDate - today;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-    console.log("Difference in days:", diffDays);
     const span = cell.querySelector("span");
-
     if (diffDays === 0) {
       span.classList.add("red-background");
     } else if (diffDays > 0 && diffDays <= 10) {
@@ -31,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// table filter
+// table category filter
 document.addEventListener("DOMContentLoaded", function () {
   const filterLinks = document.querySelectorAll(".filter-nav a");
   const rows = document.querySelectorAll(".recruit-row");
@@ -84,55 +78,34 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// this week filter button
-document.addEventListener("DOMContentLoaded", function () {
-  const rows = document.querySelectorAll("#result .recruit-row");
+// sort the table by "마감일" column
+document.addEventListener("DOMContentLoaded", () => {
+  const sortButton = document.querySelector(".sort button");
+  let ascending = true;
 
-  rows.forEach((row) => {
-    if (row.querySelector("td:nth-child(2)").textContent.includes("수시채용")) {
-      row.style.display = "none";
-    }
-  });
+  sortButton.addEventListener("click", () => {
+    const rows = Array.from(document.querySelectorAll("#detail-table tbody tr"));
+    rows.sort((a, b) => {
+      const dateA = a.querySelector(".end-date").dataset.endDate;
+      const dateB = b.querySelector(".end-date").dataset.endDate;
 
-  document.getElementById("filterThisWeek").addEventListener("click", function () {
-    const today = new Date();
-    const endOfWeek = new Date(today);
-    endOfWeek.setDate(today.getDate() + 7);
+      // "None"과 "상시채용" 값들을 처리
+      if (dateA === "None" && dateB === "None") return 0;
+      if (dateA === "상시채용" && dateB === "상시채용") return 0;
+      if (dateA === "None") return ascending ? 1 : -1;
+      if (dateB === "None") return ascending ? -1 : 1;
+      if (dateA === "상시채용") return ascending ? 1 : -1;
+      if (dateB === "상시채용") return ascending ? -1 : 1;
 
-    rows.forEach((row) => {
-      const endDate = new Date(row.querySelector(".end-date").dataset.endDate);
-      const isRecruitmentOpen = !row.querySelector("td:nth-child(2)").textContent.includes("수시채용");
-
-      if (endDate >= today && endDate <= endOfWeek && isRecruitmentOpen) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
-      }
+      const dateObjA = new Date(dateA);
+      const dateObjB = new Date(dateB);
+      return ascending ? dateObjA - dateObjB : dateObjB - dateObjA;
     });
+
+    const tbody = document.querySelector("#detail-table tbody");
+    tbody.innerHTML = "";
+    rows.forEach((row) => tbody.appendChild(row));
+    ascending = !ascending;
+    sortButton.classList.toggle("sorted", ascending);
   });
 });
-
-// table sort
-function sortTable(columnIndex) {
-  const table = document.getElementById("detail-table");
-  const rows = Array.from(table.rows).slice(1);
-  const isAsc = table.getAttribute("data-order") === "asc";
-
-  // 기존의 아이콘과 스타일 초기화
-  Array.from(table.rows[0].cells).forEach((cell) => {
-    cell.classList.remove("sorted");
-    cell.style.color = "";
-  });
-
-  table.rows[0].cells[columnIndex].classList.add("sorted");
-  table.rows[0].cells[columnIndex].style.color = "#FF7F00";
-
-  rows.sort((a, b) => {
-    const dateA = new Date(a.cells[columnIndex].innerText);
-    const dateB = new Date(b.cells[columnIndex].innerText);
-    return isAsc ? dateA - dateB : dateB - dateA;
-  });
-
-  rows.forEach((row) => table.appendChild(row));
-  table.setAttribute("data-order", isAsc ? "desc" : "asc");
-}
