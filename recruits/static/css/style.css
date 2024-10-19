@@ -219,9 +219,12 @@ td {
   height: 4rem;
   text-align: center;
 }
-th .sort {
+th .sort button {
   cursor: pointer;
   position: relative;
+}
+.sort button.sorted {
+  color: red;
 }
 .sort-arrow {
   width: 12px;
@@ -325,7 +328,7 @@ input[type="checkbox"]:checked + .bookmark-label {
   opacity: 0;
   transition: opacity 0.3s;
 }
-.orange-background:hover::after {
+.red-background:hover::after {
   opacity: 0.8;
 }
 .orange-background {
@@ -346,6 +349,39 @@ input[type="checkbox"]:checked + .bookmark-label {
 }
 .orange-background:hover::after {
   opacity: 0.8;
+}
+
+/* width 1400px 이하이면 */
+@media screen and (max-width: 1400px) {
+  .plattform-container {
+    gap: 0.5rem;
+    height: 100%;
+  }
+  .plattform-container .row {
+    gap: 0.5rem;
+  }
+  .plattform {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+/* width 1600px 이하이면 */
+@media screen and (min-width: 1600px) {
+  .plattform-container {
+    gap: 2rem;
+  }
+  .plattform-container .row {
+    gap: 2rem;
+  }
+  .plattform {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 }
 
 
