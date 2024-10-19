@@ -22,7 +22,7 @@ def job_list(request):
     closing_today_count = get_closing_today_count()
     platform_count = get_platform_count()
 
-     # 워드클라우드 이미지 생성 호출
+    # 워드클라우드 이미지 생성 호출
     wordclouds = generate_wordcloud()
 
     # db_path와 table_name 정의
