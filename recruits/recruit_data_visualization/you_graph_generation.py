@@ -57,7 +57,7 @@ def generate_bar_graph():
     buffer = io.BytesIO()
     
     # 그래프 크기와 막대 너비 조정
-    plt.figure(figsize=(7, 5))  # 너비와 높이 조정 (더 컴팩트하게)
+    plt.figure(figsize=(5, 3))  # 너비와 높이 조정 (더 컴팩트하게)
     bars = plt.bar(career_count.index, career_count.values, color=hex_colors, width=0.35)  # 막대 너비 조정
     
     # 테마에 맞춰 그래프 스타일 설정 
