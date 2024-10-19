@@ -47,27 +47,6 @@ def generate_wordcloud():
         graph = base64.b64encode(image_png).decode('utf-8')
         wordcloud_images[category] = graph
     return wordcloud_images
-# 신입/경력 공고 수 비율 그래프 생성
-# def generate_bar_graph():
-#     df = make_df()
-#     career_count = df['career'].value_counts()
-#     # 각 막대의 색상을 지정된 색상 코드로 설정
-#     hex_colors = ['#87A2FF', '#A7BBFF', '#C7D3FF', '#E7ECFF']
-#     buffer = io.BytesIO()
-#     plt.figure(figsize=(7, 4))
-#     # 막대 그래프 생성
-#     bars = plt.bar(career_count.index, career_count.values, color=hex_colors)
-#     # 타이틀 및 레이아웃 설정
-#     plt.title('신입/경력 공고 수 비율')
-#     plt.tight_layout()
-#     # 그래프를 메모리 버퍼에 저장
-#     plt.savefig(buffer, format='png')
-#     buffer.seek(0)
-#     image_png = buffer.getvalue()
-#     buffer.close()
-#     # 이미지를 base64로 인코딩
-#     graph = base64.b64encode(image_png).decode('utf-8')
-#     return graph
 
 def generate_bar_graph():
     df = make_df()
