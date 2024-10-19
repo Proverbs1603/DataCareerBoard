@@ -25,12 +25,17 @@ else:
 def generate_wordcloud():
     df = make_df()
     # 제외하고 싶은 단어 리스트
-    remove_words = ['기술 스택 없음', '기술스택', '외']
+    remove_words = ['기술 스택 없음', '기술스택', '외', '엔지니어링', '분석', '사이언' ,'인공지능','AI' ,'엔지니어']
+
+    # 단어에 remove_words 리스트의 단어가 포함되어 있으면 제거
+    def remove_unwanted_words(text_list):
+        return ' '.join([word for word in text_list if not any(remove_word in word for remove_word in remove_words)])
+
     # stack이 리스트로 되어 있는 경우
     df_drop_category = df.groupby('category_name')['stack'].apply(
-        lambda x: ' '.join([' '.join([item.strip() for item in stack_list if item and item.strip() not in remove_words])
-                            for stack_list in x if isinstance(stack_list, list)])
+        lambda x: ' '.join([remove_unwanted_words(stack_list) for stack_list in x if isinstance(stack_list, list)])
     )
+
     font_path = os.path.join(settings.BASE_DIR, 'recruits/static/assets/NanumGothic.ttf')
     # 워드클라우드 생성 및 이미지로 변환
     wordcloud_images = {}
