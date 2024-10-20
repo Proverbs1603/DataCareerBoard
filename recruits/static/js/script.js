@@ -132,7 +132,7 @@ function showWordCloud(index) {
     currentWordCloudIndex = index;
 }
 
-// 화살표 버튼 클릭 이벤트에 showWordCloud 연결
+// 화살표 버튼 클릭 이벤트에 WordCloud 연결
 document.querySelectorAll('.controls button').forEach((button, idx) => {
     button.addEventListener('click', () => {
         const direction = parseInt(button.getAttribute('onclick').match(/-?\d+/)[0]);

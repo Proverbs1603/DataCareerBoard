@@ -53,7 +53,7 @@ def generate_wordcloud():
         wordcloud_images[category] = graph
     return wordcloud_images
 
-def generate_bar_graph():
+def generate_bar_graph(values):
     df = make_df()
     career_count = df['career'].value_counts()
 
@@ -62,7 +62,7 @@ def generate_bar_graph():
     buffer = io.BytesIO()
     
     # 그래프 크기와 막대 너비 조정
-    plt.figure(figsize=(5, 3))  # 너비와 높이 조정 (더 컴팩트하게)
+    plt.figure(figsize=(3, 4))  # 너비와 높이 조정 (더 컴팩트하게)
     bars = plt.bar(career_count.index, career_count.values, color=hex_colors, width=0.35)  # 막대 너비 조정
     
     # 테마에 맞춰 그래프 스타일 설정 
@@ -71,6 +71,11 @@ def generate_bar_graph():
     plt.grid(axis='y', linestyle='--', alpha=0.4, color='#DDDDDD')  # y축 격자선 (선 스타일 조정)
     plt.tight_layout()  # 레이아웃 조정
 
+    # 기존 막대 위에 데이터 개수 표시
+    for bar, value in zip(bars, career_count.values):
+        plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{value}',
+                    ha='center', va='bottom', fontsize=10, weight='bold')
+    
     # 그래프를 메모리 버퍼에 저장
     plt.savefig(buffer, format='png', transparent=True)  # 투명 배경
     buffer.seek(0)
