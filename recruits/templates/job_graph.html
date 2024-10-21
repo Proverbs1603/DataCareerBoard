@@ -25,19 +25,20 @@
         <section class="graph-detail-container">
           <h2 class="title-heading2">Visualized Data</h2>  <!-- 제목 중앙 정렬 -->
           <div class="graph-grid">
-            <!-- 왼쪽 큰 영역 (두 그래프 묶음) -->
-            <div class="graph-wrapper graph-large">
-              <h3>시/도별 채용 공고 수</h3>
-              <div class="graph" id="graph-choropleth">
-                {{ choropleth_html|safe }}
-              </div>
+          <!-- 왼쪽 큰 영역 (두 그래프 묶음) -->
+          <div class="graph-wrapper graph-large">
+            <h3>시/도별 채용 공고 수</h3>
+            <div class="graph" id="graph-choropleth">
+              {{ choropleth_html|safe }}
             </div>
+          </div>
             <!-- 오른쪽 상단 작은 영역 -->
             <div class="graph-wrapper graph-small-top">
               <h3>신입/경력 공고 수 비율</h3>
               <img src="data:image/png;base64,{{ bar_graph }}" alt="신입/경력 공고 비율">
             </div>
-            <!-- 오른쪽 하단 작은 영역 -->
+          
+          <!-- 오른쪽 하단 작은 영역 -->
             <div class="graph-wrapper graph-small-bottom">
               <h3>플랫폼 및 카테고리 별 채용 공고</h3>
               <div class="graph" id="graph-platform-category">

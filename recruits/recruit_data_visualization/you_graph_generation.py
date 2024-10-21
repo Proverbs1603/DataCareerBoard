@@ -42,7 +42,7 @@ def generate_wordcloud():
     for category, stack_words in df_drop_category.items():
         wordcloud = WordCloud(width=800, height=400, background_color='white', font_path=font_path).generate(stack_words)
         buffer = io.BytesIO()
-        plt.figure(figsize=(6, 3))
+        plt.figure(figsize=(7, 3))
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis('off')
         plt.savefig(buffer, format='png')
@@ -62,13 +62,13 @@ def generate_bar_graph(values):
     buffer = io.BytesIO()
     
     # 그래프 크기와 막대 너비 조정
-    plt.figure(figsize=(3, 4))  # 너비와 높이 조정 (더 컴팩트하게)
-    bars = plt.bar(career_count.index, career_count.values, color=hex_colors, width=0.35)  # 막대 너비 조정
+    plt.figure(figsize=(3, 3.5))  # 너비와 높이 조정 (더 컴팩트하게)
+    bars = plt.bar(career_count.index, career_count.values, color=hex_colors, width=0.6)  # 막대 너비 조정
     
     # 테마에 맞춰 그래프 스타일 설정 
     plt.xticks(fontsize=8, weight='bold', color='#333333')  # x축 라벨 크기와 굵기
     plt.yticks(fontsize=10, color='#333333')  # y축 라벨 크기
-    plt.grid(axis='y', linestyle='--', alpha=0.4, color='#DDDDDD')  # y축 격자선 (선 스타일 조정)
+    plt.grid(False)  # y축 격자선 제거
     plt.tight_layout()  # 레이아웃 조정
 
     # 기존 막대 위에 데이터 개수 표시

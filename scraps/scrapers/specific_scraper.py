@@ -355,7 +355,7 @@ class WantedScraper(BaseScraper): # jk
 
             self.request_save(job_data)  # 스크래핑한 데이터를 저장하는 메서드 호출
 
-        with ThreadPoolExecutor(max_workers=2) as executor:
+        with ThreadPoolExecutor(max_workers=1) as executor:
             futures = [executor.submit(process_job, job_card) for job_card in job_cards]
             for future in as_completed(futures):
                 jobs_data.append(future.result())
@@ -484,7 +484,7 @@ class JobplanetScraper(BaseScraper): # jk
                 self.request_save(job_data)
 
             # 스레드 풀을 사용하여 병렬 처리
-            with ThreadPoolExecutor(max_workers=7) as executor:
+            with ThreadPoolExecutor(max_workers=1) as executor:
                 futures = [executor.submit(process_job, job, link) for job, link in zip(job_elements, links)]
                 for future in as_completed(futures):
                     future.result()  # 결과를 처리
@@ -621,7 +621,7 @@ class PeoplenJobScraper(BaseScraper):
         # 크롤링할 데이터를 저장할 리스트 (개별적으로 보내는 대신 리스트로 관리 가능)
         jobs = []
         # Selenium을 이용해 Chrome 브라우저 실행
-        with webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="129.0.6668.101").install())) as driver:
+        with webdriver.Chrome(service=Service(ChromeDriverManager().install())) as driver:
             page = 1  # 페이지 번호 초기값 설정
             while True:
                 url = f'https://www.peoplenjob.com/jobs?field=all&q=데이터&page={page}'
