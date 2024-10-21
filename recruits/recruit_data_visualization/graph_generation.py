@@ -4,7 +4,6 @@ import plotly.express as px
 import os
 import json
 from django.conf import settings
-from .data_processing import get_job_data
 
 def create_line_and_pie_charts(df):
     platform_counts = df['platform_name'].value_counts()
