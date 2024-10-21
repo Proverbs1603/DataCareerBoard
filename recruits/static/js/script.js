@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   endDateCells.forEach((cell) => {
     const endDateString = cell.getAttribute("data-end-date");
+
     if (endDateString === "수시채용" || endDateString === "채용시") {
       return;
     }
@@ -13,10 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isNaN(endDate)) {
       return;
     }
+
     endDate.setHours(0, 0, 0, 0);
+
     const diffTime = endDate - today;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    console.log("Difference in days:", diffDays);
     const span = cell.querySelector("span");
+
     if (diffDays === 0) {
       span.classList.add("red-background");
     } else if (diffDays > 0 && diffDays <= 10) {
@@ -25,23 +31,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+
 // table category filter
 document.addEventListener("DOMContentLoaded", function () {
   const filterLinks = document.querySelectorAll(".filter-nav a");
   const rows = document.querySelectorAll(".recruit-row");
-
   filterLinks.forEach((link) => {
     link.addEventListener("click", function (event) {
       event.preventDefault();
-
       filterLinks.forEach((link) => link.classList.remove("active"));
       this.classList.add("active");
-
       const filterCategory = this.getAttribute("data-category");
-
       rows.forEach((row) => {
         const rowCategory = row.getAttribute("data-category");
-
         if (filterCategory === "ALL" || rowCategory === filterCategory) {
           row.style.display = "";
         } else {
@@ -109,3 +111,37 @@ document.addEventListener("DOMContentLoaded", () => {
     sortButton.classList.toggle("sorted", ascending);
   });
 });
+
+// 워드클라우드
+// 현재 표시 중인 워드클라우드의 인덱스를 추적
+let currentWordCloudIndex = 0;
+
+function showWordCloud(index) {
+    const wordcloudItems = document.querySelectorAll('.wordcloud-item');
+    if (index < 0) {
+        index = wordcloudItems.length - 1; // 첫 번째에서 이전으로 가면 마지막으로 이동
+    } else if (index >= wordcloudItems.length) {
+        index = 0; // 마지막에서 다음으로 가면 첫 번째로 이동
+    }
+
+    // 모든 워드클라우드 숨기기
+    wordcloudItems.forEach(item => item.style.display = 'none');
+
+    // 선택된 워드클라우드만 표시
+    wordcloudItems[index].style.display = 'block';
+    currentWordCloudIndex = index;
+}
+
+// 화살표 버튼 클릭 이벤트에 WordCloud 연결
+document.querySelectorAll('.controls button').forEach((button, idx) => {
+    button.addEventListener('click', () => {
+        const direction = parseInt(button.getAttribute('onclick').match(/-?\d+/)[0]);
+        showWordCloud(currentWordCloudIndex + direction);
+    });
+});
+
+// 페이지 로드 시 첫 번째 워드클라우드 표시
+document.addEventListener('DOMContentLoaded', () => {
+    showWordCloud(0);
+});
+// 워드클라우드 종료

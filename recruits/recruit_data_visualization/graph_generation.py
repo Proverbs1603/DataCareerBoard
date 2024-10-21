@@ -36,30 +36,30 @@ def create_line_and_pie_charts(df):
 
     # 라인플롯 추가
     fig.add_trace(go.Scatter(x=platform_jobs_df['Platform'],
-                             y=platform_jobs_df['Counts'],
-                             mode='lines+markers',
-                             name='플랫폼 별 채용 공고',
-                             visible=True))
+                            y=platform_jobs_df['Counts'],
+                            mode='lines+markers',
+                            name='플랫폼 별 채용 공고',
+                            visible=True))
 
     # 파이차트 추가
     fig.add_trace(go.Pie(labels=category_jobs_df['Category'],
-                         values=category_jobs_df['Counts'],
-                         marker=dict(colors=colors),
-                         textinfo='percent',
-                         textposition='inside',
-                         hoverinfo='label+percent',
-                         name='카테고리 별 채용 공고',
-                         visible=False,
-                         showlegend=True)) 
+                        values=category_jobs_df['Counts'],
+                        marker=dict(colors=colors),
+                        textinfo='percent',
+                        textposition='inside',
+                        hoverinfo='label+percent',
+                        name='카테고리 별 채용 공고',
+                        visible=False,
+                        showlegend=True)) 
 
     fig.update_layout(
         updatemenus=[dict(type="buttons", direction="right", x=0.5, y=1.2, xanchor='center', yanchor='top',
-                          buttons=[dict(label="플랫폼 별 채용 공고", method="update", args=[{"visible": [True, False]},
-                                                                                      {"yaxis": {"visible": True},
-                                                                                       "plot_bgcolor": "rgba(135, 162, 255, 0.2)"}]),
-                                   dict(label="카테고리 별 채용 공고", method="update", args=[{"visible": [False, True]},
-                                                                                      {"yaxis": {"visible": False},
-                                                                                       "plot_bgcolor": "rgba(255, 255, 255, 1)"}])])],
+                            buttons=[dict(label="플랫폼 별 채용 공고", method="update", args=[{"visible": [True, False]},
+                                                                                        {"yaxis": {"visible": True},
+                                                                                        "plot_bgcolor": "rgba(135, 162, 255, 0.2)"}]),
+                                    dict(label="카테고리 별 채용 공고", method="update", args=[{"visible": [False, True]},
+                                                                                        {"yaxis": {"visible": False},
+                                                                                        "plot_bgcolor": "rgba(255, 255, 255, 1)"}])])],
         xaxis=dict(showgrid=True),
         yaxis=dict(showgrid=True),
         plot_bgcolor="rgba(135, 162, 255, 0.2)",  # 라인플롯의 배경색 유지
@@ -101,20 +101,18 @@ def create_choropleth(df_filtered):
     merged_df['Counts'] = merged_df['Counts_actual'].fillna(merged_df['Counts_default'])
     
     fig_choropleth = px.choropleth(merged_df,
-                                   geojson=geojson_data,
-                                   locations='Region',
-                                   featureidkey='properties.CTP_KOR_NM',
-                                   color='Counts',
-                                   title='시/도별 채용 공고 수',
-                                   color_continuous_scale='Blues',
-                                   width=900, height=700,
-                                   range_color=[1, merged_df['Counts'].max()])
+                                    geojson=geojson_data,
+                                    locations='Region',
+                                    featureidkey='properties.CTP_KOR_NM',
+                                    color='Counts',
+                                    color_continuous_scale='Blues',
+                                    width=600, height=900,
+                                    range_color=[1, merged_df['Counts'].max()])
 
 
     fig_choropleth.update_geos(
-        fitbounds="locations",
         visible=False,
-        projection_scale=7,
+        projection_scale=45,
         center={"lat": 36.5, "lon": 127.5},
         showland=True,
         landcolor="white",

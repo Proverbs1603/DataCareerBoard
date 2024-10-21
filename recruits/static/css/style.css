@@ -17,7 +17,7 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
   background-color: #004b44;
 }
 .dashboard {
@@ -76,23 +76,40 @@ a #mainIcon {
 }
 .graph-container {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-height: 17rem;
-  justify-content: space-between;
+  justify-content: space-between; /* 양쪽 요소 간 간격 */
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 1rem; /* 요소 간격 */
   /* border: 1px solid blue; */
 }
 .card-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 33%;
+  width: 30%;
   padding: 1rem;
   background-color: #f9f9f9;
   border-radius: 0.5rem;
 }
+
+.card-wrapper h3 {
+  display: inline-block; /* 제목과 총 공고 수를 같은 행에 배치하기 위해 inline-block 사용 */
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.total-count {
+  display: inline-block; /* 같은 행에 배치 */
+  font-size: 16px;
+  color: #666;
+  margin-left: 20px; /* 제목과의 간격 */
+  float: right; /* 오른쪽에 고정 */
+}
+
 .card {
   display: flex;
+  /* justify-content: space-between; 카드 내용 정렬 */
   flex-direction: row;
   align-items: flex-end;
   border: 1px solid #ccc;
@@ -122,7 +139,7 @@ a #mainIcon {
   justify-content: space-between;
   margin-top: 2rem;
   max-height: calc(100vh - 18rem);
-  overflow: hidden;
+  overflow: auto;
 }
 .table-container {
   width: 70%;
@@ -141,7 +158,7 @@ a #mainIcon {
   z-index: 1;
 }
 .plattform-container {
-  width: 25%;
+  width: 28%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -366,3 +383,169 @@ input[type="checkbox"]:checked + .bookmark-label {
     object-fit: cover;
   }
 }
+
+
+/* 그래프 컨테이너 스타일 */
+.graph-grid {
+  display: grid;
+  grid-template-columns: 50% 50%; /* 균등한 두 열로 설정 */
+  grid-template-rows: auto; /* 자동으로 높이 조정 */
+  gap: 20px; /* 각 항목 간의 간격 */
+  width: 100%; /* 전체 가로 폭 사용 */
+  height: 100%; /* 부모 요소에 맞추기 */
+  padding: 20px; /* 전체 여백 */
+  box-sizing: border-box; /* 여백을 포함한 크기 계산 */
+}
+
+.graph-wrapper {
+  position: relative;
+  padding-top: 50px; /* 제목과 겹치지 않도록 그래프와의 간격 확보 */
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin: 10px; /* 그리드 아이템별 여백 */
+  background-color: #F9F9F9;      
+  border-radius: 8px;             
+  box-shadow: 0px 0px 10px rgba(145, 118, 118, 0.1);
+  overflow: hidden; /* 내용이 넘어가지 않도록 숨기기 */
+}
+
+/* 그래프 공통 스타일 */
+.graph-wrapper h3 {
+  position: absolute;
+  top: 0; /* 부모 요소의 맨 위에 고정 */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+/* 왼쪽 큰 영역 */
+.graph-large {
+  position: relative;
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+ /* 지도의 최소 높이를 지정하여 공간이 확보되도록 함 */
+}
+
+.graph-large .h3{
+  position: absolute;
+  top: 10px; /* 위쪽에서 약간 간격 */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 10;
+}
+/* 오른쪽 위 작은 영역 */
+.graph-small-top {
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 1 / 2; /* 첫 번째 행 */
+  width: 100%;
+  height: auto; /* 필요에 따라 자동으로 높이 설정 */
+}
+.graph-content img {
+  max-width: 100%; /* 이미지 크기를 부모 요소의 너비에 맞춤 */
+  height: auto;
+  margin-left: auto; /* 왼쪽 여백을 최대화하여 이미지를 오른쪽으로 정렬 */
+}
+/* 오른쪽 아래 작은 영역 */
+.graph-small-bottom {
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 2 / 3; /* 두 번째 행 */
+  width: 100%;
+  height: auto; /* 필요에 따라 자동으로 높이 설정 */
+}
+
+/* 지도 요소에 적용되는 제목 */
+.graph-large h3 {
+  top: 20px; /* 조금 더 위로 올림 */
+}
+
+/* 작은 그래프 제목 */
+.graph-small-top h3, .graph-small-bottom h3 {
+  top: 5px; /* 작은 그래프의 경우 간격 조정 */
+}
+
+/* 그래프 컨테이너 스타일 */
+
+
+
+/* #워드클라우드# */
+
+.wordcloud-item {
+  display: flex;
+  flex-direction: column; /* 수직 정렬 */
+  align-items: center; /* 중앙 정렬 */
+  justify-content: center;
+  margin: 20px;
+  text-align: center;
+  padding: 15px; /* 내부 여백 추가 */
+  background-color: #f9f9f9; /* 약간의 배경색 추가로 가독성 향상 */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 추가로 시각적 분리 */
+}
+
+.wordcloud-item h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px; /* 이미지와의 간격 */
+}
+
+.wordcloud-item img {
+  max-width: 80%; /* 이미지 크기 조정 */
+  height: auto; /* 비율 유지 */
+  margin-bottom: 10px;
+}
+.graph-wrapper2 {
+  position: relative; /* 자식 요소의 절대 위치를 기준으로 설정 */
+}
+
+.graph-wrapper2 .total-count {
+  position: absolute; /* 오른쪽 위에 고정 */
+  top: 10px; /* 위쪽 여백 */
+  right: 10px; /* 오른쪽 여백 */
+  font-size: 14px;
+  color: #666;
+  margin-top: 0; /* 이전의 여백 제거 */
+  background-color: rgba(255, 255, 255, 0.7); /* 가독성을 위한 배경 추가 (선택사항) */
+  padding: 5px 10px; /* 텍스트와 배경 간 여백 */
+  border-radius: 5px; /* 모서리 둥글게 (선택사항) */
+  border: 3px solid #054A44; /* 녹색 테두리 추가 */
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.controls button {
+  background: none;
+  align-items: center; /* 중앙 정렬 */
+  border: 3px solid #054A44; /* 얇은 초록색 테두리 추가 */
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px; /* 둥근 테두리 */
+  
+}
+.controls button:hover {
+  color: #004b44; /* 버튼에 호버 시 텍스트 색상 변경 */
+  border: 3px solid #054A44; /* 호버 시에도 테두리 유지 */
+  background-color: #69807e; 
+}
+
+
+/**************그래프 탭입니다 *****************/
+
+
