@@ -9,7 +9,7 @@ def make_df():
     recruits = Recruit.objects.all().values()
 
     # Pandas 데이터프레임으로 변환
-    df = pd.DataFrame(list(recruits))
+    df = pd.DataFrame(recruits)
     
     return df
 

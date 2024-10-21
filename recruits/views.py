@@ -14,7 +14,6 @@ from .recruit_data_visualization.data_processing import get_job_data
 from .recruit_data_visualization.graph_generation import create_line_and_pie_charts, create_choropleth
 from .recruit_data_visualization.you_data_processing import make_df, get_closing_today_count, get_platform_count
 from .recruit_data_visualization.you_graph_generation import generate_wordcloud, generate_bar_graph
-from .recruit_data_visualization.all_count_visualiztion import get_data_count
 from collections import Counter
 def job_list(request):
     today = datetime.now()
@@ -26,12 +25,8 @@ def job_list(request):
     # 워드클라우드 이미지 생성 호출
     wordclouds = generate_wordcloud()
 
-    # db_path와 table_name 정의
-    db_path = 'db.sqlite3'  # SQLite3 데이터베이스 경로
-    table_name = 'recruits_recruit'  # 테이블 이름
-
     # 데이터 개수 가져오기
-    all_position_count = get_data_count(db_path, table_name)
+    all_position_count = Recruit.objects.count()
 
     context = {
         'recruits' : recruits,

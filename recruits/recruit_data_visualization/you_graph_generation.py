@@ -22,12 +22,13 @@ elif current_os == 'Linux':
     plt.rc('font', family='NanumGothic')
 else:
     print(f'{current_os} is not set')
+    
 def generate_wordcloud():
     df = make_df()
-    # 제외하고 싶은 단어 리스트
-    remove_words = ['기술 스택 없음', '기술스택', '외', '엔지니어링', '분석', '사이언' ,'인공지능','AI' ,'엔지니어']
+    # 제외하고 싶은 단어 집합
+    remove_words = {'기술 스택 없음', '기술스택', '외', '엔지니어링', '분석', '사이언' ,'인공지능','AI' ,'엔지니어'}
 
-    # 단어에 remove_words 리스트의 단어가 포함되어 있으면 제거
+    # 단어에 remove_words 집합의 단어가 포함되어 있으면 제거
     def remove_unwanted_words(text_list):
         return ' '.join([word for word in text_list if not any(remove_word in word for remove_word in remove_words)])
 

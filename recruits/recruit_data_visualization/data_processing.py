@@ -1,6 +1,5 @@
 import pandas as pd
 from recruits.models import Recruit
-from .region_converter import convert_region  # 지역 변환 함수는 별도로 모듈화
 
 def get_job_data():
     # Recruit 데이터베이스에서 모든 데이터를 가져옴
@@ -16,3 +15,32 @@ def get_job_data():
     df_filtered = df.dropna(subset=['region_converted'])
 
     return df, df_filtered
+
+#지역
+def convert_region(region):
+    regions_dict = {
+    '서울': '서울특별시',
+    '부산': '부산광역시',
+    '대구': '대구광역시',
+    '인천': '인천광역시',
+    '광주': '광주광역시',
+    '대전': '대전광역시',
+    '울산': '울산광역시',
+    '세종': '세종특별자치시',
+    '경기': '경기도',
+    '강원': '강원도',
+    '충북': '충청북도',
+    '충남': '충청남도',
+    '전북': '전라북도',
+    '전남': '전라남도',
+    '경북': '경상북도',
+    '경남': '경상남도',
+    '제주': '제주특별자치도'
+}
+    
+    if region is None:
+        return None
+    for key in regions_dict:
+        if region.startswith(key):
+            return regions_dict[key]
+    return None
