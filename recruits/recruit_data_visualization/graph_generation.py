@@ -5,6 +5,7 @@ import os
 import json
 from django.conf import settings
 from plotly.subplots import make_subplots
+from shapely.geometry import shape
 
 def create_line_and_pie_charts(df):
     platform_counts = df['platform_name'].value_counts()
@@ -74,7 +75,23 @@ def create_line_and_pie_charts(df):
 
     return fig.to_html(full_html=False)
 
-
+# GeoJSON 파일에서 각 지역의 중심 좌표와 폴리곤 면적을 계산하는 함수
+def get_center_and_area(geojson_data):
+    centers = {}
+    for feature in geojson_data['features']:
+        region_name = feature['properties']['CTP_KOR_NM']
+        polygon = shape(feature['geometry'])
+        
+        # 폴리곤의 중심과 면적 계산
+        centroid = polygon.centroid
+        area = polygon.area
+        
+        centers[region_name] = {
+            'lon': centroid.x,
+            'lat': centroid.y,
+            'area': area
+        }
+    return centers
 
 def create_choropleth(df_filtered):
     # GeoJSON 파일 경로
@@ -138,6 +155,32 @@ def create_choropleth(df_filtered):
         autosize=False,  # autosize 비활성화
         margin={"r": 0, "t": 0, "l": 0, "b": 0},  # 위, 아래 여백을 없앰
     )
+
+    # 각 지역의 중심 좌표와 면적을 계산
+    region_centers = get_center_and_area(geojson_data)
+
+    # 글자 크기 설정
+    font_size = 9
+
+    # Scattergeo로 각 지역의 중심 좌표에 텍스트를 표시
+    lon_values = [region_centers[region]['lon'] for region in merged_df['Region']]
+    lat_values = [region_centers[region]['lat'] for region in merged_df['Region']]
+
+    # 경기도(경기) 지역만 별도로 위치 조정
+    if '경기도' in merged_df['Region'].values:
+        idx = merged_df['Region'].tolist().index('경기도')
+        lon_values[idx] += 0.2  # 경기도의 글자를 오른쪽으로 이동
+
+    fig_choropleth.add_trace(go.Scattergeo(
+        lon=lon_values,
+        lat=lat_values,
+        text=merged_df['Counts'],  # 각 지역의 Counts 값 표시
+        mode='text',  # 텍스트만 표시
+        textfont=dict(size=font_size, color="#8BD8BD", family="Arial Black"),  # 폰트 크기와 스타일 설정
+        textposition="middle center",  # 텍스트 위치를 중앙으로 설정
+        showlegend=False,  # 범례 숨기기
+        hoverinfo="skip"  # hover 정보 생략
+    ))
 
     ### 막대 및 선 그래프 변경 시작 ###
 
