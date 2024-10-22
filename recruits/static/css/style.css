@@ -568,3 +568,56 @@ input[type="checkbox"]:checked + .bookmark-label {
     object-fit: cover;
   }
 }
+
+/*********** 신입경력 그래프 추가요소 시작 ************/
+/* 통계 텍스트와 그래프를 나란히 배치하는 컨테이너 */
+.statistics-container {
+  display: grid;
+  grid-template-columns: auto 1fr; 
+  align-items: center; 
+  gap: 40px; 
+}
+
+.statistics-text {
+  padding: 120px 20px;
+  background-color: rgba(240, 239, 239, 0.705); 
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  text-align: left;
+}
+
+.career-graph {
+  display: flex;
+  justify-content: center;
+}
+
+.career-graph img {
+  max-width: 100%; 
+  height: auto;
+}
+
+/* 제목 스타일 */
+.statistics-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* 신입 비율 스타일 */
+.intern-percentage {
+  font-size: 36px;
+  font-weight: bold;
+  color: #f1ba52; /* 강조된 색상 */
+  margin: 5px 0;
+}
+
+/* 경력 비율 스타일 */
+.experienced-percentage {
+  font-size: 16px;
+  color: #333333;
+}
+
+/*********** 신입경력 그래프 추가요소 끝 ************/

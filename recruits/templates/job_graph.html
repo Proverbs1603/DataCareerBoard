@@ -32,12 +32,20 @@
               {{ choropleth_html|safe }}
             </div>
           </div>
-            <!-- 오른쪽 상단 작은 영역 -->
-            <div class="graph-wrapper graph-small-top">
-              <h3>신입/경력 공고 수 비율</h3>
-              <img src="data:image/png;base64,{{ bar_graph }}" alt="신입/경력 공고 비율">
+          <!-- 오른쪽 상단 작은 영역: 신입/경력 공고 수 비율 -->
+          <div class="graph-wrapper graph-small-top">
+            <h3>신입/경력 공고 수 비율</h3>
+            <div class="statistics-container">
+              <div class="statistics-text">
+                <div class="statistics-title">전체: {{ total_jobs   }}</div>
+                <div class="intern-percentage">신입: {{ intern_percentage|floatformat:2  }}%</div>
+                <div class="experienced-percentage">경력: {{ experienced_percentage|floatformat:2 }}%</div>
+              </div>
+              <div class="career-graph">
+                <img src="data:image/png;base64,{{ bar_graph }}" alt="신입/경력 공고 비율">
+              </div>
             </div>
-          
+          </div>                   
           <!-- 오른쪽 하단 작은 영역 -->
             <div class="graph-wrapper graph-small-bottom">
               <h3>플랫폼 및 카테고리 별 채용 공고</h3>

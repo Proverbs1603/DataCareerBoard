@@ -57,12 +57,20 @@ def job_graph(request):
     filtered_values = [value for value in career_values if value is not None]
     career_counts = Counter(filtered_values)
 
+    # 총 공고수 및 신입, 경력 계산
+    total_intern = career_counts.get('신입·경력', 0) + career_counts.get('신입', 0)
+    total_experienced = career_counts.get('신입·경력', 0) + career_counts.get('경력', 0)
+    total_jobs = total_intern + total_experienced
+
+    # 신입과 경력의 비율 계산
+    intern_percentage = (total_intern / total_jobs) * 100 if total_jobs > 0 else 0
+    experienced_percentage = (total_experienced / total_jobs) * 100 if total_jobs > 0 else 0
 
     # 그래프 생성
     line_plot_html = create_line_and_pie_charts(df)
     choropleth_html = create_choropleth(df_filtered)
     wordclouds = generate_wordcloud()
-    bar_graph = generate_bar_graph(career_counts)
+    bar_graph, career_data = generate_bar_graph(career_counts) # 텍스트
 
     # 컨텍스트 설정
     context = {
@@ -70,6 +78,9 @@ def job_graph(request):
         'choropleth_html': choropleth_html,
         'wordclouds': wordclouds,
         'bar_graph': bar_graph,
+        'total_jobs': total_jobs,
+        'intern_percentage': intern_percentage,
+        'experienced_percentage': experienced_percentage,
     }
 
     # 템플릿 렌더링
