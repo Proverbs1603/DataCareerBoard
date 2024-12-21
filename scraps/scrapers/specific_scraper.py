@@ -127,7 +127,7 @@ class RocketpunchScraper(BaseScraper):
                 
                 end_date = soup.find('i', class_="ic-calendar_new icon").next_sibling.get_text().strip()
                 job_info['end_date'] = end_date.split()[0]
-                job_info['platform_name'] = "RocketPunch"
+                job_info['platform_name'] = "rocketpunch"
                 
                 job_info['category_name'] = None # 카테고리는 따로 없어서 추출하지 않음
                 stacks = soup.select_one("#wrap > div.eight.wide.job-content.column > section:nth-child(5) > div").find_all('a')
@@ -187,7 +187,7 @@ class SurfitScraper(BaseScraper):
                     job_info['company_name'] = soup.select_one('#app > div.jobs > div > div > div > div > div.iTVFTT > div.zpulQ > div > div > span').get_text().strip()
                     job_info['detail_url'] = job_url
                     job_info['end_date'] = soup.select_one("#app > div.jobs > div > div > div > div > div.content-area.isNepE > div > div > ul > li:nth-child(3) > span.value").get_text().strip()
-                    job_info['platform_name'] = "Surfit"
+                    job_info['platform_name'] = "surfit"
                     job_info['category_name'] = self.category_to_name[cat]
                     
                     stacks = soup.select_one("#app > div.jobs > div > div > div > div > div.content-area.isNepE > div > div > div.job-post-info > div:nth-child(2) > ul")
@@ -474,7 +474,7 @@ class JobplanetScraper(BaseScraper): # jk
                 job_data["company_name"] = company_name.get_text(strip=True) if company_name else None
 
                 job_data["detail_url"] = link.get("href")
-                job_data["platform_name"] = "Jobplanet"
+                job_data["platform_name"] = "jobplanet"
 
                 # 추가 정보를 가져오기
                 additional_info = scrape_additional_info(job_data["detail_url"])
@@ -609,7 +609,7 @@ class CatchScraper(BaseScraper):
                     "company_name": company.get_text().strip(),  # 회사 이름
                     "detail_url": detail_url,  # 디테일 페이지 URL
                     "end_date": end_date,  # 마감일 (현재 연도 포함)
-                    "platform_name": "Catch"  # 플랫폼 이름
+                    "platform_name": "catch"  # 플랫폼 이름
                 }
                 self.request_save(job_info)  # 요청을 보내기                
 
