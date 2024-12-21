@@ -5,7 +5,6 @@ from datetime import datetime
 
 class RecruitSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
-        #태현님 이곳에서 전처리 작업하시면 됩니다.
         
         attrs['category_name'] = self.category_name(attrs['title'])
         keys = ['end_date', 'career','region','stack']
