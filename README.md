@@ -33,8 +33,20 @@ Web Scraping 을 활용하여 "데이터 직무 채용공고 통합 서비스"�
 
 https://github.com/user-attachments/assets/ad1f278d-de24-4dd8-b5cc-4418462cd6e1
 
+# 🐳 Docker Build
+### 1. 도커 빌드
+```
+$ docker build -t datacareerboard:latest .
+```
+### 2. 도커 run
+```
+$ docker run -d -p 8000:8000 datacareerboard
+```
 
-# ⚙️ django-myapp 프로젝트 환경 설정
+
+
+
+# ⚙️ 프로젝트 개발환경 설정 (도커X)
 ### 1. 프로젝트 클론하기
 ```
 $ git clone https://github.com/Proverbs1603/DataCareerBoard.git
