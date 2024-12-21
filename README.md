@@ -37,8 +37,8 @@ https://github.com/user-attachments/assets/ad1f278d-de24-4dd8-b5cc-4418462cd6e1
 # ⚙️ django-myapp 프로젝트 환경 설정
 ### 1. 프로젝트 클론하기
 ```
-$ git clone https://github.com/DE4-Team2-1PJ/django-myapp.git
-$ cd django-myapp
+$ git clone https://github.com/Proverbs1603/DataCareerBoard.git
+$ cd DataCareerBoard
 ```
 ### 2. 가상 환경 설정
 가상 환경을 설정하려면, 아래 명령어를 사용하여 가상 환경을 생성하고 활성화하세요.
